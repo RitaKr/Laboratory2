@@ -4,7 +4,16 @@ public class Product {
   private String producer;
   private int quantity;
   private int price;
-  
+  private String group;
+
+  public Product(String name, String description, String producer, int quantity, int price, String group) {
+    this.name = name;
+    this.description = description;
+    this.producer = producer;
+    this.quantity = quantity;
+    this.price = price;
+    this.group = group;
+  }
   public Product(String name, String description, String producer, int quantity, int price) {
     this.name = name;
     this.description = description;
@@ -53,6 +62,13 @@ public class Product {
     this.price = price;
   }
 
+  public String getGroup() {
+    return group;
+  }
+
+  public void setGroup(String group) {
+    this.group = group;
+  }
 
   public String toString() {
     return "Назва: " + name + "," +

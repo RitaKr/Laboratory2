@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Factory {
     private static ProductsGroup[] productsGroups;
     private static Product[] allProducts;
@@ -85,10 +87,10 @@ public class Factory {
                     numberOfProductsGroups +" груп"+ending+" товарів. А саме: \n"+pgString;
         else return  "На складі поки нема товарів";
     }
-    public static Product findProduct(String search, String mode) {
+    public static Product findProduct(String search) {
         Product product = null;
         for (Product pr:allProducts) {
-            if (pr.getName().equalsIgnoreCase(search) && mode.equalsIgnoreCase("name") || pr.getProducer().equalsIgnoreCase(search) && mode.equalsIgnoreCase("description")){
+            if (pr.getName().equalsIgnoreCase(search)){
                 product = pr;
                 System.out.println(product);
             }
@@ -97,16 +99,28 @@ public class Factory {
         return product;
 
     }
-    public Product findProduct(int search, String mode) {
-        Product product = null;
+    public static Product[] findProduct(String search, String mode) {
+        ArrayList<Product> products = new ArrayList<>();
         for (Product pr:allProducts) {
-            if (pr.getPrice()==search && mode.equalsIgnoreCase("price") || pr.getQuantity()==search && mode.equalsIgnoreCase("quantity")){
-                product = pr;
-                System.out.println(product);
+            if (pr.getGroup().equalsIgnoreCase(search) && mode.equalsIgnoreCase("group") || pr.getProducer().equalsIgnoreCase(search) && mode.equalsIgnoreCase("producer")){
+                products.add(pr);
+                System.out.println(pr);
             }
         }
         //System.out.println("no matches found");
-        return product;
+        return (Product[]) products.toArray();
+
+    }
+    public Product[] findProduct(int search, String mode) {
+        ArrayList<Product> products = new ArrayList<>();
+        for (Product pr:allProducts) {
+            if (pr.getPrice()==search && mode.equalsIgnoreCase("price") || pr.getQuantity()==search && mode.equalsIgnoreCase("quantity")){
+                products.add(pr);
+                System.out.println(pr);
+            }
+        }
+        //System.out.println("no matches found");
+        return (Product[]) products.toArray();
 
     }
     public ProductsGroup findProductsGroup(String name) {

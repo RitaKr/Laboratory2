@@ -9,11 +9,17 @@ public class ProductsGroup {
     this.description = description;
     this.products = products;
     numberOfProducts = products.length;
+    for (Product p:products) {
+      p.setGroup(name);
+    }
   }
   public ProductsGroup(String name, String description) {
     this.name = name;
     this.description = description;
     this.products = new Product[0];
+    for (Product p:products) {
+      p.setGroup(name);
+    }
 
   }
   
@@ -47,11 +53,11 @@ public class ProductsGroup {
   public void setNumberOfProducts(int numberOfProducts) {
     this.numberOfProducts = numberOfProducts;
   }
-  public void addProduct(String name, String description, String producer, int quantity, int price){
+  public void addProduct(String productName, String description, String producer, int quantity, int price){
     //System.out.println(numberOfFaculties);
     extendProductsArray(numberOfProducts+1);
     //System.out.println(numberOfFaculties);
-    products[numberOfProducts-1]=new Product(name, description, producer, quantity, price);
+    products[numberOfProducts-1]=new Product(productName, description, producer, quantity, price, name);
 
   }
   protected void extendProductsArray(int n){
