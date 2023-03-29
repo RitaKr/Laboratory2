@@ -1,14 +1,16 @@
+import java.util.ArrayList;
+
 public class ProductsGroup {
   private String name;
   private String description;
-  private Product[] products;
+  private ArrayList<Product> products;
   private int numberOfProducts = 0;
 
-  public ProductsGroup(String name, String description, Product[] products) {
+  public ProductsGroup(String name, String description, ArrayList<Product> products) {
     this.name = name;
     this.description = description;
     this.products = products;
-    numberOfProducts = products.length;
+    numberOfProducts = products.size();
     for (Product p:products) {
       p.setGroup(name);
     }
@@ -16,7 +18,7 @@ public class ProductsGroup {
   public ProductsGroup(String name, String description) {
     this.name = name;
     this.description = description;
-    this.products = new Product[0];
+    this.products = new ArrayList<>();
     for (Product p:products) {
       p.setGroup(name);
     }
@@ -31,7 +33,7 @@ public class ProductsGroup {
     return description;
   }
   
-  public Product[] getProducts() {
+  public ArrayList<Product> getProducts() {
     return products;
   }
   
@@ -43,7 +45,7 @@ public class ProductsGroup {
     this.description = description;
   }
   
-  public void setProducts(Product[] products) {
+  public void setProducts(ArrayList<Product> products) {
     this.products = products;
   }
   public int getNumberOfProducts() {
@@ -55,27 +57,20 @@ public class ProductsGroup {
   }
   public void addProduct(String productName, String description, String producer, int quantity, int price){
     //System.out.println(numberOfFaculties);
-    extendProductsArray(numberOfProducts+1);
-    //System.out.println(numberOfFaculties);
-    products[numberOfProducts-1]=new Product(productName, description, producer, quantity, price, name);
+    products.add(new Product(productName, description, producer, quantity, price, name));
+    numberOfProducts=products.size();
+    Factory.updateStock();
+
 
   }
-  protected void extendProductsArray(int n){
-    Product[] extendedArr = new Product[n];
-    for (int i=0; i<numberOfProducts; i++) {
-      extendedArr[i] = products[i];
-    }
-    numberOfProducts = n;
-    products = extendedArr;
-    //System.out.println(Arrays.toString(products));
-  }
+
 
 
 
   public String toString(){
     String productsString="";
     for (int i=0; i<numberOfProducts;i++){
-      productsString+="  "+(i+1)+") "+products[i]+"\n";
+      productsString+="  "+(i+1)+") "+products.get(i)+"\n";
     }
     String ending="";
     if (numberOfProducts%10>1 && numberOfProducts%10<5 && !(numberOfProducts>=12 && numberOfProducts<=14)) ending="и";

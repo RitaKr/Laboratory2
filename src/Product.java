@@ -75,6 +75,6 @@ public class Product {
             "\n  Опис: "+description+"," +
             "\n  Виробник: "+producer+"," +
             "\n  Кількість: "+quantity+","+
-            "\n  Ціна за одиницю: "+price+"грн";
+            "\n  Ціна за одиницю: "+price+"грн\n";
   }
 }
