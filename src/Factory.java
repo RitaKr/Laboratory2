@@ -5,16 +5,25 @@ public class Factory {
     private static Product[] allProducts;
     private static int numberOfProductsGroups = 0;
     private static int numberOfProducts = 0;
-    private ProductsGroup default1 = new ProductsGroup("group1", "this is group1", new Product[] {
-         new Product("product1", "this is product1", "producer", 5, 100),
-         new Product("product2", "this is product2", "producer", 4, 10)
+    private ProductsGroup beds = new ProductsGroup("Ліжка", "Зручні ліжка для дому", new Product[] {
+         new Product("Pollen", "Металеве ліжко білого кольору. Розміри: ширина: 95 см, довжина: 205 см, висота: 36 см", "Швеція", 5, 4000),
+         new Product("Saline", "Ліжко вироблене з масиву ялини. Розміри: ширина: 148 см, довжина: 208 см, висота: 50 см", "Польща", 7, 5600),
+         new Product("Kongsberg","Дерев'яне ліжко з тканинною оббивкою. Розміри: ширина: 176 см, висота: 218 см, висота: 101 см", "Швеція",10,12999)
     });
-    private ProductsGroup default2 = new ProductsGroup("group2", "this is group2", new Product[] {
+    private ProductsGroup chairs = new ProductsGroup("Стільці", "Якісні обідні стільці", new Product[] {
+        new Product("Jonstrup","Стілець з каркасом із сталі, оббитий штучною шкірою","Польща", 12, 1250),
+        new Product("Trusty","Стілець, виготовлений з масиву сосни","Польща",15,1750),
+        new Product("Kooked","Стілець із основою виготовленою з фанери та сталі, оббитий тканиною","Швеція",20,1650)
+    });
 
+    private ProductsGroup cupboards = new ProductsGroup("Шафи","Ергономічне зберігання - шафа у вашій оселі", new Product[]{
+        new Product("Appendage","Шафа білого кольору з меламіну та ДСП, ширина: 49 см, висота: 176 см, глибина: 50 см","Польща",10,3500),
+        new Product("Jens-lev","Шафа з дубу, ширина: 96 см, висота: 176 см, глибина: 50 см","Швеція",9,6500),
+        new Product("Leveller","Шафа виготовлена з ХДФ та меламіну. 4-дверна, із 3 шухлядами. Начиння шафи: 2 рейки для вішалок, 4 полиці. Розміри: 200х59 см, вис. 200 см","Швеція",13,18999)
     });
 
     Factory(){
-        this.productsGroups = new ProductsGroup[]{default1, default2 };
+        this.productsGroups = new ProductsGroup[]{beds, chairs, cupboards};
         this.numberOfProductsGroups = productsGroups.length;
         updateStock();
     }
@@ -160,7 +169,7 @@ public class Factory {
             for (Product p:pg.getProducts()) {
                 totalCost+=(p.getQuantity()*p.getPrice());
             }
-            System.out.println("Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+"грн\n");
+            System.out.println("Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+" грн\n");
             return true;
         } else {
             System.out.print("Групи товарів "+groupName+" немає на складі.\n");
