@@ -21,7 +21,7 @@ public class Main {
         //System.out.println(factory);
         factory.addMoreOfProduct("Pollen", 6);
         factory.showAllProductsByGroup("Ліжка");
-
+        factory.showAllProducts();
 
     }
 

@@ -279,26 +279,47 @@ public class Factory {
         }
         return group;
     }
-
     /**
-     * Method that returns String with data on a group
-     * @param groupName name of the products group
-     * @return String with group's data
+     * Method that returns Arraylist of strings with data on every product
+     * @return Arraylist of strings with data on every product
      */
-    public boolean showAllProductsByGroup(String groupName) {
-        ProductsGroup pg = findProductsGroup(groupName);
-        if (pg!=null) {
-            String s="Всі товари групи товарів "+groupName+": \n";
-            for (int i=0; i<pg.getProducts().size();i++){
-                s+="  "+(i+1)+") "+pg.getProducts().get(i)+"\n";
+    public ArrayList<String> showAllProducts() {
+        if (!allProducts.isEmpty()) {
+            //String s="Всі товари групи товарів "+groupName+": \n";
+            ArrayList<String> products = new ArrayList<>();
+            for (int i=0; i<numberOfProducts;i++){
+                products.add("  "+(i+1)+") "+allProducts.get(i)+"  Належить до групи: "+allProducts.get(i).getGroup());
             }
 //            System.out.println("Інформація по групі товарів "+groupName+": ");
 //            System.out.println(pg);
-            System.out.println(s);
-            return true;
+            //System.out.println(products);
+            return products;
+        } else {
+            System.out.print("Склад пустий.\n");
+            return null;
+        }
+    }
+
+    /**
+     * Method that returns Arraylist of strings with data on every product of a group
+     * @param groupName name of the products group
+     * @return Arraylist of strings with data on every group's product
+     */
+    public ArrayList<String> showAllProductsByGroup(String groupName) {
+        ProductsGroup pg = findProductsGroup(groupName);
+        if (pg!=null) {
+            //String s="Всі товари групи товарів "+groupName+": \n";
+            ArrayList<String> products = new ArrayList<>();
+            for (int i=0; i<pg.getProducts().size();i++){
+               products.add("  "+(i+1)+") "+pg.getProducts().get(i));
+            }
+//            System.out.println("Інформація по групі товарів "+groupName+": ");
+//            System.out.println(pg);
+            //System.out.println(products);
+            return products;
         } else {
             System.out.print("Групи товарів "+groupName+" немає на складі.\n");
-            return false;
+            return null;
         }
     }
 
