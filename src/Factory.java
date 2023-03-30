@@ -190,6 +190,25 @@ public class Factory {
                 return "Товар "+name+" не існує на складі!\n";
             }
         }
+    /**
+     * Method that edits product's price
+     * @param name name of the product (case-insensitive)
+     * @param newData new value of property to change
+     * @return message to be displayed in a dialog window after finishing the operation
+     */
+    public String editProduct(String name, int newData) {
+        if (allProducts.contains(findProduct(name))) {
+            Product product = findProduct(name);
+            product.setPrice(newData);
+
+            updateStock();
+            System.out.println("Товар " + name + " відредаговано!\n");
+            return "Товар " + name + " відредаговано!\n";
+        } else {
+            System.out.println("Товар "+name+" не існує на складі!\n");
+            return "Товар "+name+" не існує на складі!\n";
+        }
+    }
 
     /**
      * Method that deletes a product (from its group and factory)
