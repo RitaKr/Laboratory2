@@ -63,8 +63,36 @@ public class ProductsGroup {
 
 
   }
+  /**
+   * Method that returns Arraylist of strings with data on every product of a group
+   * @return Arraylist of strings with data on every group's product
+   */
+  public ArrayList<String> showAllProductsByGroup() {
+      ArrayList<String> pr = new ArrayList<>();
+      for (int i=0; i<numberOfProducts;i++){
+        pr.add(""+(i+1)+") "+products.get(i).toStringUI());
+      }
+//            System.out.println("Інформація по групі товарів "+groupName+": ");
+//            System.out.println(pg);
+      //System.out.println(products);
+      return pr;
+
+  }
+  /**
+   * Method that returns the cost of all the products among a group
+   * @return String with message of all group's products cost
+   */
+  public String getAllProductsCostByGroup() {
+
+      int totalCost = 0;
+      for (Product p:products) {
+        totalCost+=(p.getQuantity()*p.getPrice());
+      }
+      System.out.println("Загальна вартість товару групи товарів "+name+" становить "+totalCost+" грн\n");
+      return ""+totalCost+" грн\n";
 
 
+  }
 
 
   public String toString(){
@@ -78,4 +106,5 @@ public class ProductsGroup {
     if (numberOfProducts>0) return "Назва: "+name+",\nОпис: "+description+"\nВ наявності "+numberOfProducts+" товар"+ending+": \n"+ productsString;
     else  return "Назва: "+name+",\nОпис: "+description+"\nВ наявності наразі нема жодного товару\n";
   }
+
 }

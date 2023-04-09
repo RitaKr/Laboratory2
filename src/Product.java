@@ -73,8 +73,15 @@ public class Product {
   public String toString() {
     return "Назва: " + name + "," +
             "\n  Опис: "+description+"," +
-            "\n  Виробник: "+producer+"," +
+            "\n Виробник: "+producer+"," +
             "\n  Кількість: "+quantity+","+
             "\n  Ціна за одиницю: "+price+"грн\n";
+  }
+  public String toStringUI() {
+    return "Назва: " + name + "," +
+            "<br>Опис: "+description+"," +
+            "<br>Виробник: "+producer+"," +
+            "<br>Кількість: "+quantity+","+
+            "<br>Ціна за одиницю: "+price+"грн";
   }
 }

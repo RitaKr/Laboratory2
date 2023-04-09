@@ -11,6 +11,18 @@ public class Factory {
         return allProducts;
     }
 
+    public static ArrayList<ProductsGroup> getProductsGroups() {
+        return productsGroups;
+    }
+
+    public static int getNumberOfProductsGroups() {
+        return numberOfProductsGroups;
+    }
+
+    public static int getNumberOfProducts() {
+        return numberOfProducts;
+    }
+
     private ProductsGroup beds = new ProductsGroup("Ліжка", "Зручні ліжка для дому", new ArrayList<>(Arrays.asList(
             new Product("Pollen", "Металеве ліжко білого кольору. Розміри: ширина: 95 см, довжина: 205 см, висота: 36 см", "Швеція", 5, 4000),
             new Product("Saline", "Ліжко вироблене з масиву ялини. Розміри: ширина: 148 см, довжина: 208 см, висота: 50 см", "Польща", 7, 5600),
@@ -288,7 +300,7 @@ public class Factory {
             //String s="Всі товари групи товарів "+groupName+": \n";
             ArrayList<String> products = new ArrayList<>();
             for (int i=0; i<numberOfProducts;i++){
-                products.add("  "+(i+1)+") "+allProducts.get(i)+"  Належить до групи: "+allProducts.get(i).getGroup());
+                products.add(""+(i+1)+") "+allProducts.get(i).toStringUI()+"<br>  Належить до групи: "+allProducts.get(i).getGroup());
             }
 //            System.out.println("Інформація по групі товарів "+groupName+": ");
 //            System.out.println(pg);
@@ -311,7 +323,7 @@ public class Factory {
             //String s="Всі товари групи товарів "+groupName+": \n";
             ArrayList<String> products = new ArrayList<>();
             for (int i=0; i<pg.getProducts().size();i++){
-               products.add("  "+(i+1)+") "+pg.getProducts().get(i));
+               products.add(""+(i+1)+") "+pg.getProducts().get(i).toStringUI());
             }
 //            System.out.println("Інформація по групі товарів "+groupName+": ");
 //            System.out.println(pg);
@@ -335,7 +347,7 @@ public class Factory {
             }
         }
         System.out.println("Загальна вартість товару на складі становить "+totalCost+"грн\n");
-        return "Загальна вартість товару на складі становить "+totalCost+"грн\n";
+        return ""+totalCost+"грн\n";
     }
 
     /**
@@ -351,7 +363,7 @@ public class Factory {
                 totalCost+=(p.getQuantity()*p.getPrice());
             }
             System.out.println("Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+" грн\n");
-            return "Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+" грн\n";
+            return ""+totalCost+" грн\n";
         } else {
             System.out.print("Групи товарів "+groupName+" немає на складі.\n");
             return "Групи товарів "+groupName+" немає на складі.\n";
