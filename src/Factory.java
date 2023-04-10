@@ -107,14 +107,15 @@ public class Factory {
             if (mode.equalsIgnoreCase("name")){
                 group.setName(newData);
                 for (Product p:group.getProducts()) {
-                    p.setGroup(name);
+                    p.setGroup(newData);
                 }
+
             } else if (mode.equalsIgnoreCase("description")) {
                 group.setDescription(newData);
             } else {
                 return "Invalid argument!\n";
             }
-
+            System.out.println(allProducts);
             updateStock();
             System.out.println("Групу товарів "+name+" відредаговано!\n");
             return "Групу товарів "+name+" відредаговано!\n";
@@ -306,7 +307,7 @@ public class Factory {
             //String s="Всі товари групи товарів "+groupName+": \n";
             ArrayList<String> products = new ArrayList<>();
             for (int i=0; i<numberOfProducts;i++){
-                products.add(""+(i+1)+") "+allProducts.get(i).toStringUI()+"<br>  Належить до групи: "+allProducts.get(i).getGroup());
+                products.add(""+(i+1)+") "+allProducts.get(i).toStringUI()+"<br><b>Належить до групи:</b> "+allProducts.get(i).getGroup());
             }
 //            System.out.println("Інформація по групі товарів "+groupName+": ");
 //            System.out.println(pg);

@@ -6,92 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-
-class intInputDialog {
-    private int value;
-    private SpinnerModel spinnerModel;
-    private JButton ok;
-    private final int width = 300;
-    private final int height = 150;
-    public int getValue() {
-        return value;
-    }
-
-    public SpinnerModel getSpinnerModel() {
-        return spinnerModel;
-    }
-
-    public JButton getOk() {
-        return ok;
-    }
-
-    /**
-     * Dialog window with JSpinner instead of JTextField
-     * @param frame JFrame of the main program
-     * @param windowTitle window's title
-     * @param label text that will be displayed inside of window
-     * @param method "editPrice", "add", "sell" - parameters that determine which method will be performed on OK click
-     * @param productName name of the product that method interacts with
-     */
-    intInputDialog(JFrame frame, String windowTitle, String label, String method, String productName){
-        spinnerModel = new SpinnerNumberModel(1, 1, 10000000, 1);
-        cheateDialog(frame, windowTitle, label, method, productName);
-    }
-    intInputDialog(JFrame frame, String windowTitle, String label, int max, String method, String productName){
-        spinnerModel = new SpinnerNumberModel(1, 1, max, 1);
-        cheateDialog(frame, windowTitle, label, method, productName);
-    }
-
-    private void cheateDialog(JFrame frame, String windowTitle, String label, String method, String productName){
-        JDialog dialog = new JDialog(frame, true);
-        dialog.setLayout(new FlowLayout());
-        JLabel displayText = new JLabel(label);
-        displayText.setPreferredSize(new Dimension(width-50, 30));
-        JSpinner intInput = new JSpinner(spinnerModel);
-        intInput.setPreferredSize(new Dimension(width-50, 25));
-        ok = new JButton("OK");
-        JButton cancel = new JButton("Cancel");
-        ok.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                value = (int) intInput.getValue();
-                int confirm = JOptionPane.showConfirmDialog(frame, "Ви впевнені?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
-                if (confirm==0) {
-                    String result="";
-                    switch (method) {
-                        case "editPrice" -> {
-                            result = Program.factory.editProduct(productName, value);
-                        }
-                        case "add" -> {
-                            result = Program.factory.addMoreOfProduct(productName, value);
-                        }
-                        case "sell" -> {
-                            result = Program.factory.soldProduct(productName, value);
-                        }
-                    }
-                    dialog.setVisible(false);
-                    JOptionPane.showMessageDialog(frame, result, "Операція пройшла успішно!",JOptionPane.PLAIN_MESSAGE);
-
-                }
-
-            }
-        });
-        cancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dialog.setVisible(false);
-            }
-        });
-        dialog.add(displayText);
-        dialog.add(intInput);
-        dialog.add(ok);
-        dialog.add(cancel);
-
-        dialog.setSize(width,height);
-        dialog.setLocation(frame.getX()+frame.getWidth()/2-width/2, frame.getY()+frame.getHeight()/2-height/2);
-        dialog.setTitle(windowTitle);
-        dialog.setVisible(true);
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    }
-}
 class UI extends JFrame {
     Factory factory;
     JButton toMenu;
@@ -106,7 +20,8 @@ class UI extends JFrame {
     final Color white1 = new Color(84, 79, 75, 255);
     final Font font1 = new Font("Trebuchet MS", Font.BOLD, 36);
     final Font font2 = new Font("Trebuchet MS", Font.PLAIN, 22);
-    static final Font font3 = new Font("Trebuchet MS", Font.PLAIN, 16);
+    final Font font3 = new Font("Trebuchet MS", Font.PLAIN, 16);
+    final Font font4 = new Font("Trebuchet MS", Font.PLAIN, 14);
     final int width = 800;
     final int height = 800;
     UI(Factory factory){
@@ -213,6 +128,34 @@ class UI extends JFrame {
         label.setForeground(color);
         label.setHorizontalAlignment(horizontalAlignment);
     }
+    public void styleLabel(JLabel label, Font font,  int horizontalAlignment) {
+        label.setFont(font);
+        label.setForeground(white);
+        label.setHorizontalAlignment(horizontalAlignment);
+    }
+    public void styleLabel(JLabel label, Font font) {
+        label.setFont(font);
+        label.setForeground(white);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+    public JPanel createProductPanel(String productInfo) {
+        JPanel productPanel = new JPanel();
+        productPanel.setBackground(col4);
+        //productPanel.setPreferredSize(new Dimension(400, 200));
+        JLabel label = new JLabel("<html><div style=\"width: "+(width-300)+"px; padding: 5px;\">"+productInfo+"</div></html");
+        styleLabel(label, font4);
+        productPanel.add(label);
+        return productPanel;
+    }
+    public JPanel createProductPanel(String productInfo, int width) {
+        JPanel productPanel = new JPanel();
+        productPanel.setBackground(col4);
+        //productPanel.setPreferredSize(new Dimension(400, 200));
+        JLabel label = new JLabel("<html><div style=\"width: "+(width-80)+"px; padding: 5px;\">"+productInfo+"</div></html");
+        styleLabel(label, font4);
+        productPanel.add(label);
+        return productPanel;
+    }
 }
 class MenuUI extends UI {
 
@@ -229,8 +172,6 @@ class MenuUI extends UI {
     JButton editProductButton = new JButton("Редагувати товар");
     JButton deleteProductButton = new JButton("Видалити товар");
     JLabel label = new JLabel("Оберіть пункт меню:", JLabel.CENTER);
-
-    AddGroupUI addGroupUI = new AddGroupUI(factory);
 
     MenuUI(Factory factory){
         super(factory);
@@ -316,7 +257,17 @@ class MenuUI extends UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
+                AddGroupUI addGroupUI = new AddGroupUI(factory);
                 addGroupUI.setVisible(true);
+
+            }
+        });
+        editGroupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Редагування групи товарів", factory, "edit");
+                chooseGroupUI.setVisible(true);
 
             }
         });
@@ -352,13 +303,7 @@ class StatsUI extends UI{
         if (products!=null && !products.isEmpty()) {
 
             for (String product : products) {
-                JPanel productPanel = new JPanel();
-                productPanel.setBackground(col4);
-                //productPanel.setPreferredSize(new Dimension(400, 200));
-
-                JLabel label = new JLabel("<html><div style=\"width: "+(width-300)+"px; padding: 5px;\">"+product+"</div></html");
-                styleLabel(label);
-                productPanel.add(label);
+                JPanel productPanel = createProductPanel(product);
                 statsPanel.add(productPanel, gbc);
             }
         }
@@ -416,17 +361,18 @@ class ChooseGroupUI extends UI {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         switch (action) {
-//                        case "edit":
-//                            editGroupUI = new EditGroupUI(groupsArr.get(i).getName(), groupsArr.get(i).getProducts(), factory);
-//                            editGroupUI.setVisible(true);
-//                            dispose();
-//                            break;
+//
 //
 //                        case "addProduct":
 //                            addProductUI = new AddProductUI(groupsArr.get(i).getName(), factory);
 //                            addProductUI.setVisible(true);
 //                            dispose();
 //                            break;
+                            case "edit":
+                            EditGroupUI editGroupUI = new EditGroupUI(group, factory);
+                            editGroupUI.setVisible(true);
+                            dispose();
+                            break;
                             case "delete":
                                 int confirm = JOptionPane.showConfirmDialog(ChooseGroupUI.super.rootPane, "Ви впевнені, що хочете видалити " + group.getName() + "?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
                                 if (confirm == 0) {
@@ -444,8 +390,6 @@ class ChooseGroupUI extends UI {
                                         + "<br>Загальна вартість товару у групі: " + group.getAllProductsCostByGroup() + "</div></html>";
                                 StatsUI statisticsUI = new StatsUI("Інформація по групі товарів", info, group.showAllProductsByGroup(), factory);
                                 statisticsUI.setVisible(true);
-                                dispose();
-
                                 dispose();
                                 break;
                         }
@@ -523,6 +467,99 @@ class AddGroupUI extends UI {
     }
 
 }
+
+class EditGroupUI extends UI {
+    JLabel label = new JLabel("Обрана група товарів:");
+    JPanel groupInfoPanel;
+
+    JPanel buttonsPanel = new JPanel();
+    JLabel choseLabel = new JLabel("Оберіть дію:");
+
+    JButton editName = new JButton("Змінити назву");
+    JButton editDescription = new JButton("Змінити опис");
+    ProductsGroup group;
+    private String listProductNames(ArrayList<Product> products) {
+        String names = "";
+        if (!products.isEmpty()) {
+            for (Product product : products) {
+                names += product.getName() + (products.indexOf(product)<products.size()-1 ? ", ": "");
+            }
+        } else {
+            names = "<em>Поки немає товарів</em>";
+        }
+        return names;
+    }
+    public EditGroupUI(ProductsGroup group, Factory factory){
+        super(factory);
+        this.group = group;
+        setVisible(false);
+        mainLabel.setText("Редагування групи товарів");
+
+        styleLabel(label);
+        String info = "<b>Назва:</b> "+group.getName()+"<br><b>Опис:</b> "+group.getDescription()+"<br><b>Товари:</b> "+listProductNames(group.getProducts());
+        groupInfoPanel = createProductPanel(info,400);
+        styleLabel(choseLabel);
+
+        styleMenuButton(editName);
+        styleMenuButton(editDescription);
+
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        buttonsPanel.setLayout(new GridBagLayout());
+        buttonsPanel.setBackground(col3);
+        buttonsPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
+        buttonsPanel.add(choseLabel, gbc);
+        buttonsPanel.add(editName, gbc);
+        buttonsPanel.add(editDescription, gbc);
+
+        mainPanel.add(label, gbc);
+        mainPanel.add(groupInfoPanel, gbc);
+        mainPanel.add(buttonsPanel, gbc);
+
+        editName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editGroup("", "Введіть нову назву для групи товарів "+group.getName(), "Ви впевнені, що хочете змінити назву \""+group.getName()+"\"", "name");
+            }
+        });
+        editDescription.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editGroup("", "Введіть новий опис для групи товарів "+group.getName(),"Ви впевнені, що хочете змінити опис \""+group.getDescription()+"\"", "description");
+            }
+
+        });
+
+    }
+
+    /**
+     * Method that shows dialog windows to change fields of products group
+     * @param value starting value of input
+     * @param message1 message that will be displayed in the dialog window (asking for new value)
+     * @param message2 message that will be displayed in the confirmation window (are you sure?)
+     * @param mode "name", "description" - determines which value will be changed
+     */
+    private void editGroup(String value, String message1, String message2, String mode){
+        String newValue = JOptionPane.showInputDialog(EditGroupUI.super.rootPane, message1,value);
+        if (newValue!=null && newValue.equals("")) {
+            JOptionPane.showMessageDialog(EditGroupUI.super.rootPane, "Ви не ввели нічого!", "Поле не заповнене!", JOptionPane.ERROR_MESSAGE);
+            editGroup("", message1, message2, mode);
+        } else if (newValue!=null) {
+            int confirm = JOptionPane.showConfirmDialog(EditGroupUI.super.rootPane, message2+" на \""+newValue+"\"?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
+            if (confirm == 0) {
+                String result = factory.editProductsGroup(group.getName(), newValue, mode);
+                JOptionPane.showMessageDialog(EditGroupUI.super.rootPane, result, "Операція пройшла успішно!", JOptionPane.PLAIN_MESSAGE);
+                dispose();
+                EditGroupUI editGroupUI = new EditGroupUI(group, factory);
+                editGroupUI.setVisible(true);
+
+            } else {
+                editGroup(newValue, message1, message2, mode);
+            }
+        }
+    }
+
+}
 public class Program {
     static Factory factory;
     static MenuUI menuUI;
@@ -537,7 +574,7 @@ public class Program {
         menuUI = new MenuUI(factory);
 
         menuUI.setVisible(true);
-//        new intInputDialog(menu, "Зміна ціни товару", "Введіть нову ціну товару pollen:", "editPrice", "pollen");
+//        new intInputDialog(menuUI, "Зміна ціни товару", "Введіть нову ціну товару pollen:", "editPrice", "pollen");
 //        new intInputDialog(menu, "Списання товару", "Скільки шт. pollen продали?",  Factory.findProduct("pollen").getQuantity(), "sell", "pollen");
 //        new intInputDialog(menu, "Додавання товару", "Скільки шт. pollen прибуло на склад?", "add", "pollen");
 //        System.out.println(factory);

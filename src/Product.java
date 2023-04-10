@@ -78,10 +78,10 @@ public class Product {
             "\n  Ціна за одиницю: "+price+"грн\n";
   }
   public String toStringUI() {
-    return "Назва: " + name + "," +
-            "<br>Опис: "+description+"," +
-            "<br>Виробник: "+producer+"," +
-            "<br>Кількість: "+quantity+","+
-            "<br>Ціна за одиницю: "+price+"грн";
+    return "<b>Назва:</b> " + name + "," +
+            "<br><b>Опис:</b> "+description+"," +
+            "<br><b>Виробник:</b> "+producer+"," +
+            "<br><b>Кількість:</b> "+quantity+","+
+            "<br><b>Ціна за одиницю:</b> "+price+"грн";
   }
 }
