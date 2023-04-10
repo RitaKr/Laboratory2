@@ -98,15 +98,15 @@ class UI extends JFrame {
     JPanel mainPanel;
     JLabel mainLabel;
     GridBagConstraints gbc = new GridBagConstraints();
-    final Color col1 = new Color(69, 128, 206);
-    final  Color col2 = new Color(0, 0, 0);
+    static final Color col1 = new Color(69, 128, 206);
+    static final  Color col2 = new Color(0, 0, 0);
     final Color col3 = new Color(51, 48, 47);
     final Color col4 = new Color(140, 73, 49);
     final Color white = new Color(255, 255, 255);
-    final Color white1 = new Color(72, 67, 64, 255);
+    final Color white1 = new Color(84, 79, 75, 255);
     final Font font1 = new Font("Trebuchet MS", Font.BOLD, 36);
     final Font font2 = new Font("Trebuchet MS", Font.PLAIN, 22);
-    final Font font3 = new Font("Trebuchet MS", Font.PLAIN, 16);
+    static final Font font3 = new Font("Trebuchet MS", Font.PLAIN, 16);
     final int width = 800;
     final int height = 800;
     UI(Factory factory){
@@ -162,12 +162,56 @@ class UI extends JFrame {
         toMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 MenuUI menuUI = new MenuUI(factory);
                 menuUI.setVisible(true);
-                dispose();
+
             }
         });
 
+
+    }
+    public void styleMenuButton(JButton button) {
+        button.setBackground(col2);
+        button.setForeground(col1);
+        button.setFont(font3);
+        button.setMargin(new Insets(10, 25, 10, 25));
+        button.setPreferredSize(new Dimension(260, 40));
+        button.setBorder(BorderFactory.createLineBorder(col2, 1, true));
+
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        //button.setBorderPainted(false);
+    }
+    public void styleItemButton(JButton button) {
+        button.setBackground(col2);
+        button.setFont(font2);
+        button.setForeground(white);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setMargin(new Insets(20, 30, 20, 30));
+        button.setBorderPainted(false);
+
+        //button.setBorderPainted(false);
+    }
+    public void styleLabel(JLabel label) {
+        label.setFont(font2);
+        label.setForeground(white);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+    public void styleLabel(JLabel label, int horizontalAlignment) {
+        label.setFont(font2);
+        label.setForeground(white);
+        label.setHorizontalAlignment(horizontalAlignment);
+    }
+    public void styleLabel(JLabel label, Font font, Color color) {
+        label.setFont(font);
+        label.setForeground(color);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+    public void styleLabel(JLabel label, Font font, Color color, int horizontalAlignment) {
+        label.setFont(font);
+        label.setForeground(color);
+        label.setHorizontalAlignment(horizontalAlignment);
     }
 }
 class MenuUI extends UI {
@@ -186,27 +230,23 @@ class MenuUI extends UI {
     JButton deleteProductButton = new JButton("Видалити товар");
     JLabel label = new JLabel("Оберіть пункт меню:", JLabel.CENTER);
 
-
+    AddGroupUI addGroupUI = new AddGroupUI(factory);
 
     MenuUI(Factory factory){
         super(factory);
         mainLabel.setText("Вітаємо на складі!");
-        styleButton(searchButton);
-        styleButton(factoryStatsButton);
-        styleButton(groupStatsButton);
-        styleButton(addGroupButton);
-        styleButton(editGroupButton);
-        styleButton(deleteGroupButton);
-        styleButton(addProductButton);
-        styleButton(editProductButton);
-        styleButton(deleteProductButton);
+        styleMenuButton(searchButton);
+        styleMenuButton(factoryStatsButton);
+        styleMenuButton(groupStatsButton);
+        styleMenuButton(addGroupButton);
+        styleMenuButton(editGroupButton);
+        styleMenuButton(deleteGroupButton);
+        styleMenuButton(addProductButton);
+        styleMenuButton(editProductButton);
+        styleMenuButton(deleteProductButton);
 
 
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setFont(font2);
-        //label.setPreferredSize(new Dimension(getWidth(), 70));
-        label.setForeground(white);
-        label.setVerticalAlignment(SwingConstants.CENTER);
+        styleLabel(label);
 
         stats.setBorder(new TitledBorder(BorderFactory.createLineBorder(white, 1), "Стан складу", TitledBorder.CENTER, TitledBorder.TOP, font3, white));
         stats.setPreferredSize(new Dimension(280, 120));
@@ -263,18 +303,25 @@ class MenuUI extends UI {
                 dispose();
             }
         });
-    }
-    public void styleButton(JButton button) {
-        button.setBackground(col2);
-        button.setFont(font3);
-        button.setMargin(new Insets(10, 25, 10, 25));
-        button.setPreferredSize(new Dimension(260, 40));
-        button.setBorder(BorderFactory.createLineBorder(col2, 1, true));
-        button.setForeground(col1);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deleteGroupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Видалення групи товарів", factory, "delete");
+                chooseGroupUI.setVisible(true);
 
-        //button.setBorderPainted(false);
+            }
+        });
+        addGroupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                addGroupUI.setVisible(true);
+
+            }
+        });
     }
+
 
 }
 
@@ -288,14 +335,10 @@ class StatsUI extends UI{
         mainLabel.setText(title);
 
         info.setText(information);
-        info.setFont(font2);
-        info.setForeground(white);
-        info.setVerticalAlignment(SwingConstants.CENTER);
-        info.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.insets = new Insets(5, 0, 5, 0);
+        styleLabel(info);
 
+        gbc.insets = new Insets(5, 0, 5, 0);
         statsPanel.setLayout(new GridBagLayout());
-        //statsPanel.setPreferredSize(new Dimension(500,800));
         statsPanel.setBackground(col3);
         generateProductLabels();
 
@@ -306,19 +349,18 @@ class StatsUI extends UI{
 
     }
     private void generateProductLabels() {
-        for (String product : products) {
-            JPanel productPanel = new JPanel();
-            productPanel.setBackground(col4);
-            //productPanel.setPreferredSize(new Dimension(400, 200));
+        if (products!=null && !products.isEmpty()) {
 
-            JLabel label = new JLabel("<html><div style=\"width: "+(width-300)+"px; padding: 5px;\">"+product+"</div></html");
-            label.setFont(font3);
-            label.setForeground(white);
+            for (String product : products) {
+                JPanel productPanel = new JPanel();
+                productPanel.setBackground(col4);
+                //productPanel.setPreferredSize(new Dimension(400, 200));
 
-//            label.setVerticalAlignment(SwingConstants.CENTER);
-//            label.setHorizontalAlignment(SwingConstants.CENTER);
-            productPanel.add(label);
-            statsPanel.add(productPanel, gbc);
+                JLabel label = new JLabel("<html><div style=\"width: "+(width-300)+"px; padding: 5px;\">"+product+"</div></html");
+                styleLabel(label);
+                productPanel.add(label);
+                statsPanel.add(productPanel, gbc);
+            }
         }
     }
 }
@@ -336,77 +378,155 @@ class ChooseGroupUI extends UI {
         mainLabel.setText(title);
 
         label.setText("Оберіть групу товарів:");
-        label.setFont(font2);
-        label.setForeground(white);
-        label.setVerticalAlignment(SwingConstants.CENTER);
-        label.setHorizontalAlignment(SwingConstants.CENTER);
+        styleLabel(label);
         mainPanel.add(label, gbc);
 
         generateButtons();
+
         groupsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         groupsPanel.setBackground(col3);
         gbc.insets = new Insets(10, 10, 10, 10);
-
         mainPanel.add(groupsPanel, gbc);
+
     }
     private void generateButtons(){
-        for (ProductsGroup group:groupsArr) {
+        if (groupsArr.isEmpty()) {
+            label.setText("На складі нема жодної групи товарів");
+            gbc.insets = new Insets(10, 10, 10, 10);
+            mainPanel.add(label, gbc);
+            JButton addGroupButton = new JButton("Додати групу товарів");
+            styleMenuButton(addGroupButton);
 
-            JButton button = new JButton(group.getName());
-            button.setBackground(col2);
-            button.setFont(font2);
-            button.setForeground(white);
-            //button.setBorder(BorderFactory.createLineBorder(col2, 1, true));
-            button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            button.setMargin(new Insets(20, 30, 20, 30));
-            button.setBorderPainted(false);
-            button.addActionListener(new ActionListener() {
+            addGroupButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    switch (action) {
+                    AddGroupUI addGroupUI = new AddGroupUI(factory);
+                    addGroupUI.setVisible(true);
+                    dispose();
+                }
+            });
+            mainPanel.add(addGroupButton, gbc);
+        } else {
+            for (ProductsGroup group : groupsArr) {
+                JButton button = new JButton(group.getName());
+                styleItemButton(button);
+                groupsPanel.add(button, gbc);
+
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        switch (action) {
 //                        case "edit":
 //                            editGroupUI = new EditGroupUI(groupsArr.get(i).getName(), groupsArr.get(i).getProducts(), factory);
 //                            editGroupUI.setVisible(true);
 //                            dispose();
 //                            break;
-//                        case "delete":
-//                            deleteGroupUI = new DeleteGroupUI(groupsArr.get(i).getName(), factory);
-//                            deleteGroupUI.setVisible(true);
-//                            dispose();
-//                            break;
+//
 //                        case "addProduct":
 //                            addProductUI = new AddProductUI(groupsArr.get(i).getName(), factory);
 //                            addProductUI.setVisible(true);
 //                            dispose();
 //                            break;
-                        case "stats":
-                            System.out.println(factory.showAllProducts());
-                            String info = "<html><div style=\"text-align: center\">Назва групи: " +group.getName()
-                                    +"<br>Опис: "  +group.getDescription()
-                                    +"<br>Всього товарів: "  +group.getNumberOfProducts()
-                                    +"<br>Загальна вартість товару у групі: "  +group.getAllProductsCostByGroup()+"</div></html>";
-                            StatsUI statisticsUI = new StatsUI("Інформація по групі товарів", info, group.showAllProductsByGroup(), factory);
-                            statisticsUI.setVisible(true);
-                            dispose();
+                            case "delete":
+                                int confirm = JOptionPane.showConfirmDialog(ChooseGroupUI.super.rootPane, "Ви впевнені, що хочете видалити " + group.getName() + "?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
+                                if (confirm == 0) {
+                                    JOptionPane.showMessageDialog(ChooseGroupUI.super.rootPane, factory.deleteProductsGroup(group.getName()), "Результат видалення групи", JOptionPane.PLAIN_MESSAGE);
+                                    dispose();
+                                    ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Інформація по групі товарів", factory, "delete");
+                                    chooseGroupUI.setVisible(true);
+                                }
+                                break;
+                            case "stats":
+                                System.out.println(factory.showAllProducts());
+                                String info = "<html><div style=\"text-align: center\">Назва групи: " + group.getName()
+                                        + "<br>Опис: " + group.getDescription()
+                                        + "<br>Всього товарів: " + group.getNumberOfProducts()
+                                        + "<br>Загальна вартість товару у групі: " + group.getAllProductsCostByGroup() + "</div></html>";
+                                StatsUI statisticsUI = new StatsUI("Інформація по групі товарів", info, group.showAllProductsByGroup(), factory);
+                                statisticsUI.setVisible(true);
+                                dispose();
 
-                            dispose();
-                            break;
+                                dispose();
+                                break;
+                        }
                     }
-                }
-            });
+                });
 
-            groupsPanel.add(button, gbc);
+
+            }
         }
     }
+}
+
+class AddGroupUI extends UI {
+    JLabel nameLabel = new JLabel("Введіть назву групи:");
+    JTextField nameField = new JTextField(20);
+    JLabel descriptionLabel = new JLabel("Введіть опис групи:");
+    JTextArea descriptionField = new JTextArea(6, 20);
+    JButton submit = new JButton("Створити групу");
+
+    public void styleTextField(Component component){
+        component.setFont(font3);
+        component.setForeground(white);
+        component.setBackground(white1);
+    }
+    public AddGroupUI(Factory factory){
+        super(factory);
+        setVisible(false);
+        mainLabel.setText("Додавання групи товарів");
+
+        styleLabel(nameLabel, SwingConstants.LEFT);
+        styleLabel(descriptionLabel, SwingConstants.LEFT);
+
+        styleTextField(nameField);
+        nameField.setMargin(new Insets(10, 10, 10, 10));
+
+        styleTextField(descriptionField);
+        descriptionField.setMargin(new Insets(10, 10, 10, 10));
+        descriptionField.setLineWrap(true);
+
+        styleItemButton(submit);
+
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        mainPanel.add(nameLabel, gbc);
+        mainPanel.add(nameField, gbc);
+        mainPanel.add(descriptionLabel, gbc);
+        mainPanel.add(descriptionField, gbc);
+        mainPanel.add(submit, gbc);
+
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String description = descriptionField.getText();
+                if (name.equals("")) {
+                    JOptionPane.showMessageDialog(AddGroupUI.super.rootPane, "Введіть назву групи!", "Заповніть всі поля!", JOptionPane.ERROR_MESSAGE);
+                }
+                if (description.equals("")) {
+                    JOptionPane.showMessageDialog(AddGroupUI.super.rootPane, "Введіть опис групи!", "Заповніть всі поля!", JOptionPane.ERROR_MESSAGE);
+
+                }
+                if (!name.equals("") && !description.equals("")) {
+                    int confirm = JOptionPane.showConfirmDialog(AddGroupUI.super.rootPane, "Ви впевнені, що хочете створити групу " + name + "?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
+                    if (confirm == 0) {
+                        JOptionPane.showMessageDialog(AddGroupUI.super.rootPane, factory.addProductsGroup(name, description), "Додавання групи", JOptionPane.PLAIN_MESSAGE);
+                        nameField.setText("");
+                        descriptionField.setText("");
+
+                    }
+                }
+            }
+        });
+
+
+    }
+
 }
 public class Program {
     static Factory factory;
     static MenuUI menuUI;
-    UI chooseGroupUI;
-    UI chooseProductUI;
-    UI editGroupUI;
-    UI editProductUI;
-    static StatsUI statisticsUI;
+
     public static void main(String[] args) {
         factory = new Factory();
         System.out.println(factory);

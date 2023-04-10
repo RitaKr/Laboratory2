@@ -82,15 +82,15 @@ public class Factory {
      * @param description description of the products group
      * @return message to be displayed in a dialog window after finishing the operation
      */
-    public boolean addProductsGroup(String name, String description){
+    public String addProductsGroup(String name, String description){
         if (!productsGroups.contains(findProductsGroup(name))) {
             productsGroups.add(new ProductsGroup(name, description));
             updateStock();
             System.out.println("Групу товарів "+name+" додано!\n");
-            return true;
+            return "Групу товарів "+name+" додано!\n";
         } else {
-            System.out.println("Група товарів "+name+" вже існує на складі!\n");
-            return false;
+            System.out.println("Група товарів "+name+" вже існує на складі! Групу не додано\n");
+            return "Група товарів "+name+" вже існує на складі! Групу не додано\n";
         }
     }
 
