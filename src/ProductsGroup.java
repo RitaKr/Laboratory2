@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * Клас ProductsGroup.java, який містить опис групи товарів, а саме: назва групи, її опис та масив продуктів, що у ній знаходяться
+ */
 public class ProductsGroup {
   private String name;
   private String description;
@@ -64,8 +67,8 @@ public class ProductsGroup {
 
   }
   /**
-   * Method that returns Arraylist of strings with data on every product of a group
-   * @return Arraylist of strings with data on every group's product
+   * Метод, що повертає інформацію про групу товарів
+   * @return масив стрічок з інформацією про групу товарів
    */
   public ArrayList<String> showAllProductsByGroup() {
       ArrayList<String> pr = new ArrayList<>();
@@ -79,8 +82,8 @@ public class ProductsGroup {
 
   }
   /**
-   * Method that returns the cost of all the products among a group
-   * @return String with message of all group's products cost
+   * Метод, що повертає загальну вартість товарів у конкретній групі
+   * @return стрічка з повідомленням про загальну вартість
    */
   public String getAllProductsCostByGroup() {
 
@@ -94,7 +97,10 @@ public class ProductsGroup {
 
   }
 
-
+  /**
+   * Метод виводу інформації по групі товарів
+   * @return інформація по групі товарів
+   */
   public String toString(){
     String productsString="";
     for (int i=0; i<numberOfProducts;i++){

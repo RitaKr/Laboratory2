@@ -1,3 +1,6 @@
+/**
+ * Клас Product.java, у якому містяться основні поля, які описують товар, а саме: назва, опис, виробник, кількість та ціна
+ */
 public class Product {
   private String name;
   private String description;
@@ -70,6 +73,10 @@ public class Product {
     this.group = group;
   }
 
+  /**
+   * Метод виводу інформації про товар
+   * @return інформація про товар
+   */
   public String toString() {
     return "Назва: " + name + "," +
             "\n  Опис: "+description+"," +
@@ -77,6 +84,11 @@ public class Product {
             "\n  Кількість: "+quantity+","+
             "\n  Ціна за одиницю: "+price+"грн\n";
   }
+
+  /**
+   * Метод виводу інформації про товар в інтерфейсі користувача
+   * @return інформація про товар
+   */
   public String toStringUI() {
     return "<b>Назва:</b> " + name + "," +
             "<br><b>Опис:</b> "+description+"," +

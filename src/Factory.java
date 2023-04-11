@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Клас Factory.java, що містить основну інформацію про склад та методи для роботи
+ * з ним (додавання, редагування, видалення груп товарів та самих товарів та ін.)
+ */
 public class Factory {
     private static ArrayList<ProductsGroup> productsGroups;
     private static ArrayList<Product> allProducts;
@@ -55,6 +59,9 @@ public class Factory {
         updateStock();
     }
 
+    /**
+     * Метод, за допомогою якого інформація по складу оновлюється після кожної внесеної зміни
+     */
     public static void updateStock(){
         numberOfProducts=0;
         numberOfProductsGroups=0;
@@ -77,10 +84,10 @@ public class Factory {
 
 
     /**
-     * Method that adds a new products group to the factory
-     * @param name name of the products group
-     * @param description description of the products group
-     * @return message to be displayed in a dialog window after finishing the operation
+     * Метод додавання нової групи товарів до складу
+     * @param name назва групи товарів
+     * @param description опис групи
+     * @return повідомлення, що відображатиметься у діалоговому вікні після закінчення операції
      */
     public String addProductsGroup(String name, String description){
         if (!productsGroups.contains(findProductsGroup(name))) {
@@ -95,11 +102,11 @@ public class Factory {
     }
 
     /**
-     * Method that edits a products group (name\description)
-     * @param name name of the products group (case-insensitive)
-     * @param newData new value of property to change
-     * @param mode "name", "description" - property that will be reset with newData
-     * @return message to be displayed in a dialog window after finishing the operation
+     * Метод редагування групи товарів (назва/опис)
+     * @param name назва групи товарів (case-insensitive)
+     * @param newData нова інформація про групу
+     * @param mode "назва", "опис" - значення, які будуть відредаговані
+     * @return повідомлення, що відображатиметься у діалоговому вікні після закінчення операції
      */
     public String editProductsGroup(String name, String newData, String mode){
         if (productsGroups.contains(findProductsGroup(name))) {
@@ -126,9 +133,9 @@ public class Factory {
     }
 
     /**
-     * Method that deletes a products group (and its products)
-     * @param name name of the products group
-     * @return message to be displayed in a dialog window after finishing the operation
+     * Метод видалення групи товарів та самих товарів у ній
+     * @param name назва групи товарів
+     * @return повідомлення, що відображатиметься у діалоговому вікні після закінчення операції
      */
     public String deleteProductsGroup(String name){
         if (productsGroups.contains(findProductsGroup(name))) {
@@ -143,14 +150,14 @@ public class Factory {
     }
 
     /**
-     * Method that adds a new product to a group and factory
-     * @param groupName name of group to which the product is to be added
-     * @param name name of the product
-     * @param description description of the product
-     * @param producer producer of the product
-     * @param quantity quantity of the product
-     * @param price price of the product
-     * @return message to be displayed in a dialog window after finishing the operation
+     * Метод додавання нового продукту на склад
+     * @param groupName назва групи товарів, до якої треба додати товар
+     * @param name назва товару
+     * @param description опис товару
+     * @param producer виробник
+     * @param quantity кількість товару
+     * @param price ціна товару
+     * @return повідомлення, що відображатиметься у діалоговому вікні після закінчення операції
      */
     public String addProduct(String groupName, String name, String description, String producer, int quantity, int price) {
         ProductsGroup pg = findProductsGroup(groupName);
@@ -171,11 +178,11 @@ public class Factory {
     }
 
     /**
-     * Method that edits a product (name\description\producer\price\group)
-     * @param name name of the product (case-insensitive)
-     * @param newData new value of property to change
-     * @param mode "name", "description", "producer", "price", "group" - property that will be reset with newData
-     * @return message to be displayed in a dialog window after finishing the operation
+     * Метод редагування продукту (назва\опис\виробник\ціна\група)
+     * @param name назва товару (case-insensitive)
+     * @param newData нова інформація про товар
+     * @param mode "назва", "опис", "виробник", "ціна", "група" - значення, які будуть відредаговані
+     * @return повідомлення, що відображатиметься у діалоговому вікні після закінчення операції
      */
     public String editProduct(String name, String newData, String mode) {
             if (allProducts.contains(findProduct(name))) {
@@ -210,10 +217,10 @@ public class Factory {
             }
         }
     /**
-     * Method that edits product's price
-     * @param name name of the product (case-insensitive)
-     * @param newData new value of property to change
-     * @return message to be displayed in a dialog window after finishing the operation
+     * Метод редагування назви продукту
+     * @param name назва товару (case-insensitive)
+     * @param newData нова назва товару
+     * @return повідомлення, що відображатиметься у діалоговому вікні після закінчення операції
      */
     public String editProduct(String name, int newData) {
         if (allProducts.contains(findProduct(name))) {
@@ -230,9 +237,9 @@ public class Factory {
     }
 
     /**
-     * Method that deletes a product (from its group and factory)
-     * @param name name of the product (case-insensitive)
-     * @return message to be displayed in a dialog window after finishing the operation
+     * Метод видалення продукту (з групи товарів та складу загалом)
+     * @param name назва товару (case-insensitive)
+     * @return повідомлення, що відображатиметься у діалоговому вікні після закінчення операції
      */
     public String deleteProduct(String name){
         if (allProducts.contains(findProduct(name))){
@@ -251,7 +258,11 @@ public class Factory {
         }
     }
 
-
+    /**
+     * Метод знаходження товару за його назвою
+     * @param name назва продукту
+     * @return назва продукту
+     */
     public static Product findProduct(String name) {
         Product product = null;
         for (Product pr:allProducts) {
@@ -288,6 +299,12 @@ public class Factory {
         return products;
 
     }
+
+    /**
+     * Метод знаходження групи товарів за назвою
+     * @param name назва групи товарів
+     * @return назва групи
+     */
     public ProductsGroup findProductsGroup(String name) {
         ProductsGroup group = null;
         for (ProductsGroup pg:productsGroups) {
@@ -299,8 +316,8 @@ public class Factory {
         return group;
     }
     /**
-     * Method that returns Arraylist of strings with data on every product
-     * @return Arraylist of strings with data on every product
+     * Метод, що повертає інформацію про всі продукти на складі
+     * @return масив стрічок з інформацією про кожний продукт
      */
     public ArrayList<String> showAllProducts() {
         if (!allProducts.isEmpty()) {
@@ -320,9 +337,9 @@ public class Factory {
     }
 
     /**
-     * Method that returns Arraylist of strings with data on every product of a group
-     * @param groupName name of the products group
-     * @return Arraylist of strings with data on every group's product
+     * Метод, що повертає інформацію про всі товари у конкретній групі товарів
+     * @param groupName назва групи товарів
+     * @return масив стрічок з інформацією по кожній групі товарів
      */
     public ArrayList<String> showAllProductsByGroup(String groupName) {
         ProductsGroup pg = findProductsGroup(groupName);
@@ -343,8 +360,8 @@ public class Factory {
     }
 
     /**
-     * Method that returns the cost of all the products on factory
-     * @return String with message of all products cost
+     * Метод, що повертає загальну вартість усіх продуктів на складі
+     * @return String з повідомленням про загальну вартість товарів
      */
     public String showAllProductsCost() {
         int totalCost = 0;
@@ -358,9 +375,9 @@ public class Factory {
     }
 
     /**
-     * Method that returns the cost of all the products among a group
-     * @param groupName name of the products group
-     * @return String with message of all group's products cost
+     * Метод, що повертає вартість усіх продуктів у межах групи
+     * @param groupName назва групи товарів
+     * @return String з повідомленням про вартість товарів у групі
      */
     public String showAllProductsCostByGroup(String groupName) {
         ProductsGroup pg = findProductsGroup(groupName);
@@ -378,10 +395,10 @@ public class Factory {
 
     }
     /**
-     * Method that adds to factory certain amount of product and returns String with message about it
-     * @param name name of the product
-     * @param amount amount of product that was received
-     * @return message about operation
+     * Метод додавання певної кількості товару до складу.
+     * @param name назва товару
+     * @param amount кількість товару, яку було отримано
+     * @return повідомлення про операцію
      */
     public String addMoreOfProduct(String name, int amount){
         if (allProducts.contains(findProduct(name))){
@@ -398,10 +415,10 @@ public class Factory {
     }
 
     /**
-     * Method that sells certain amount of product and returns String with message about it
-     * @param name name of the product
-     * @param amount amount of product that was sold
-     * @return message about operation
+     * Метод продажу товару зі складу.
+     * @param name назва товару
+     * @param amount кількість проданого товару
+     * @return повідомлення про операцію (успішна/не успішна)
      */
     public String soldProduct(String name, int amount){
         if (allProducts.contains(findProduct(name))){
@@ -471,7 +488,10 @@ public class Factory {
         return res;
     }
 
-
+    /**
+     * Метод виводу інформації по складу
+     * @return інформація по складу
+     */
     public String toString(){
         String pgString="";
         for (int i = 0; i<numberOfProductsGroups; i++){
