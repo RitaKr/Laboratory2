@@ -264,10 +264,19 @@ public class Factory {
         return product;
 
     }
+
+    /**
+     * Method that returns ArrayList of all products that match the search (String values)
+     * @param search inputted search word (name/group/producer or their part)
+     * @param mode "name", "group", "producer" - which key to search in
+     * @return ArrayList<Product> of all products that match the search
+     */
     public static ArrayList<Product> findProduct(String search, String mode) {
         ArrayList<Product> products = new ArrayList<>();
         for (Product pr:allProducts) {
-            if (pr.getGroup().equalsIgnoreCase(search) && mode.equalsIgnoreCase("group") || pr.getProducer().equalsIgnoreCase(search) && mode.equalsIgnoreCase("producer")){
+            if (lowerCase(pr.getName()).contains(lowerCase(search)) && mode.equalsIgnoreCase("name") ||
+                    lowerCase(pr.getGroup()).contains(lowerCase(search)) && mode.equalsIgnoreCase("group") ||
+                    lowerCase(pr.getProducer()).contains(lowerCase(search)) && mode.equalsIgnoreCase("producer")){
                 products.add(pr);
                 //System.out.println(pr);
             }
@@ -276,10 +285,17 @@ public class Factory {
         return products;
 
     }
+    /**
+     * Method that returns ArrayList of all products that match the search (int values)
+     * @param search inputted search value (price/quantity)
+     * @param mode "price", "quantity" - which key to search in
+     * @return ArrayList<Product> of all products that match the search
+     */
     public ArrayList<Product> findProduct(int search, String mode) {
         ArrayList<Product> products = new ArrayList<>();
         for (Product pr:allProducts) {
-            if (pr.getPrice()==search && mode.equalsIgnoreCase("price") || pr.getQuantity()==search && mode.equalsIgnoreCase("quantity")){
+            if (pr.getPrice()==search && mode.equalsIgnoreCase("price") ||
+                    pr.getQuantity()==search && mode.equalsIgnoreCase("quantity")){
                 products.add(pr);
                 //System.out.println(pr);
             }
@@ -470,7 +486,22 @@ public class Factory {
         }
         return res;
     }
-
+    private static String lowerCase(String string) {
+        String res="";
+        char ch;
+        for (int i=0; i<string.length(); i++){
+            ch=string.charAt(i);
+            if (ch>='A' && ch<='Z') {
+                ch = (char) (ch-'A'+'a');
+            } else if (ch>='А' && ch<='Я'){
+                ch = (char)(ch-'А'+'а');
+            } else if (ch=='І' || ch=='Ї'  || ch=='Є'){
+                ch = (char)(ch-'Є'+'є');
+            }
+            res+=ch;
+        }
+        return res;
+    }
 
     public String toString(){
         String pgString="";
