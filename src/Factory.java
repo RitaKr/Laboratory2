@@ -271,12 +271,13 @@ public class Factory {
      * @param mode "name", "group", "producer" - which key to search in
      * @return ArrayList<Product> of all products that match the search
      */
-    public static ArrayList<Product> findProduct(String search, String mode) {
+    public ArrayList<Product> findProduct(String search, String mode) {
         ArrayList<Product> products = new ArrayList<>();
         for (Product pr:allProducts) {
             if (lowerCase(pr.getName()).contains(lowerCase(search)) && mode.equalsIgnoreCase("name") ||
                     lowerCase(pr.getGroup()).contains(lowerCase(search)) && mode.equalsIgnoreCase("group") ||
-                    lowerCase(pr.getProducer()).contains(lowerCase(search)) && mode.equalsIgnoreCase("producer")){
+                    lowerCase(pr.getProducer()).contains(lowerCase(search)) && mode.equalsIgnoreCase("producer") ||
+                    lowerCase(pr.getDescription()).contains(lowerCase(search)) && mode.equalsIgnoreCase("description")){
                 products.add(pr);
                 //System.out.println(pr);
             }
@@ -486,7 +487,7 @@ public class Factory {
         }
         return res;
     }
-    private static String lowerCase(String string) {
+    private String lowerCase(String string) {
         String res="";
         char ch;
         for (int i=0; i<string.length(); i++){
@@ -500,6 +501,7 @@ public class Factory {
             }
             res+=ch;
         }
+
         return res;
     }
 
