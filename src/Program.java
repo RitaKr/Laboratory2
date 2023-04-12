@@ -171,6 +171,8 @@ class MenuUI extends UI {
     JButton addProductButton = new JButton("Додати товар");
     JButton editProductButton = new JButton("Редагувати товар");
     JButton deleteProductButton = new JButton("Видалити товар");
+    JButton addMoreProductButton = new JButton("Поставка товару");
+    JButton sellProductButton = new JButton("Списання товару");
     JLabel label = new JLabel("Оберіть пункт меню:", JLabel.CENTER);
 
     MenuUI(Factory factory){
@@ -185,6 +187,8 @@ class MenuUI extends UI {
         styleMenuButton(addProductButton);
         styleMenuButton(editProductButton);
         styleMenuButton(deleteProductButton);
+        styleMenuButton(addMoreProductButton);
+        styleMenuButton(sellProductButton);
 
 
         styleLabel(label);
@@ -207,12 +211,14 @@ class MenuUI extends UI {
 
 
         productManipulations.setBorder(new TitledBorder(BorderFactory.createLineBorder(white, 1), "Робота з товарами", TitledBorder.CENTER, TitledBorder.TOP, font3, white));
-        productManipulations.setPreferredSize(new Dimension(280, 165));
+        productManipulations.setPreferredSize(new Dimension(280, 255));
         productManipulations.setBackground(col3);
         productManipulations.setForeground(white);
         productManipulations.add(addProductButton, BorderLayout.CENTER);
         productManipulations.add(editProductButton, BorderLayout.CENTER);
         productManipulations.add(deleteProductButton, BorderLayout.CENTER);
+        productManipulations.add(addMoreProductButton, BorderLayout.CENTER);
+        productManipulations.add(sellProductButton, BorderLayout.CENTER);
 
         mainPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
         gbc.insets = new Insets(5, 0, 5, 0);
@@ -269,6 +275,46 @@ class MenuUI extends UI {
                 ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Редагування групи товарів", factory, "edit");
                 chooseGroupUI.setVisible(true);
 
+            }
+        });
+        addProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Додавання товару", factory, "addProduct");
+                chooseGroupUI.setVisible(true);
+            }
+        });
+        editProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                ChooseProductUI chooseProductUI = new ChooseProductUI("Редагування товару", factory, "edit");
+//                chooseProductUI.setVisible(true);
+            }
+        });
+        deleteProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                ChooseProductUI chooseProductUI = new ChooseProductUI("Видалення товару", factory, "delete");
+//                chooseProductUI.setVisible(true);
+            }
+        });
+        addMoreProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                ChooseProductUI chooseProductUI = new ChooseProductUI("Поставка товару", factory, "addMore");
+//                chooseProductUI.setVisible(true);
+            }
+        });
+        sellProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                ChooseProductUI chooseProductUI = new ChooseProductUI("Списання товару", factory, "sell");
+//                chooseProductUI.setVisible(true);
             }
         });
     }
@@ -378,7 +424,7 @@ class ChooseGroupUI extends UI {
                                 if (confirm == 0) {
                                     JOptionPane.showMessageDialog(ChooseGroupUI.super.rootPane, factory.deleteProductsGroup(group.getName()), "Результат видалення групи", JOptionPane.PLAIN_MESSAGE);
                                     dispose();
-                                    ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Інформація по групі товарів", factory, "delete");
+                                    ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Видалення групи товарів", factory, "delete");
                                     chooseGroupUI.setVisible(true);
                                 }
                                 break;
@@ -576,7 +622,7 @@ public class Program {
         menuUI.setVisible(true);
 //        new intInputDialog(menuUI, "Зміна ціни товару", "Введіть нову ціну товару pollen:", "editPrice", "pollen");
 //        new intInputDialog(menu, "Списання товару", "Скільки шт. pollen продали?",  Factory.findProduct("pollen").getQuantity(), "sell", "pollen");
-//        new intInputDialog(menu, "Додавання товару", "Скільки шт. pollen прибуло на склад?", "add", "pollen");
+//        new intInputDialog(menu, "Додавання товару", "Скільки шт. pollen прибуло на склад?", "addMore", "pollen");
 //        System.out.println(factory);
     }
 }
