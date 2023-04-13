@@ -80,7 +80,7 @@ public class Product {
   public String toString() {
     return "Назва: " + name + "," +
             "\n  Опис: "+description+"," +
-            "\n Виробник: "+producer+"," +
+            "\n  Виробник: "+producer+"," +
             "\n  Кількість: "+quantity+","+
             "\n  Ціна за одиницю: "+price+" грн\n";
   }
