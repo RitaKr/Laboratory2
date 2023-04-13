@@ -950,7 +950,8 @@ class EditProductUI extends UI{
         editPrice.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new intInputDialog(EditProductUI.this, "Зміна ціни товару", "Введіть нову ціну товару "+product.getName()+":", "editPrice", product.getName());
+                new intInputDialog(EditProductUI.this, "Зміна ціни товару", "Введіть нову ціну товару "+product.getName()+":", product.getPrice(), 3000, 10000000, 500, "editPrice", product.getName());
+                dispose();
                 EditProductUI editProductUI = new EditProductUI(product, factory);
                 editProductUI.setVisible(true);
                 //editProduct("", "Введіть нову ціну товару "+product.getName(),"Ви впевнені, що хочете змінити ціну \""+product.getPrice()+"\"", "price");

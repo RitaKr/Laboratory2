@@ -119,7 +119,7 @@ public class Factory {
         if (productsGroups.contains(findProductsGroup(name))) {
             ProductsGroup group = findProductsGroup(name);
             if (mode.equalsIgnoreCase("name")){
-                if (!productsGroups.contains(findProductsGroup(name))) {
+                if (!productsGroups.contains(findProductsGroup(newData))) {
                     group.setName(newData);
                     for (Product p:group.getProducts()) {
                         p.setGroup(newData);
@@ -200,7 +200,7 @@ public class Factory {
             if (allProducts.contains(findProduct(name))) {
                 Product product = findProduct(name);
                 if (mode.equalsIgnoreCase("name")) {
-                    if (!allProducts.contains(findProduct(name))) {
+                    if (!allProducts.contains(findProduct(newData))) {
                         product.setName(newData);
                     } else {
                         return "Товар з назвою "+newData+" вже існує на складі! Неможливо застосувати зміну";

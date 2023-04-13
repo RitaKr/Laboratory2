@@ -40,6 +40,10 @@ public class intInputDialog {
         spinnerModel = new SpinnerNumberModel(1, 1, max, 1);
         createDialog(frame, windowTitle, label, method, productName);
     }
+    intInputDialog(JFrame frame, String windowTitle, String label, int defaultValue, int min, int max, int step, String method, String productName) {
+        spinnerModel = new SpinnerNumberModel(defaultValue, min, max, step);
+        createDialog(frame, windowTitle, label, method, productName);
+    }
 
     private void createDialog(JFrame frame, String windowTitle, String label, String method, String productName) {
         JDialog dialog = new JDialog(frame, true);
