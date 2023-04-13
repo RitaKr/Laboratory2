@@ -82,7 +82,7 @@ public class Product {
             "\n  Опис: "+description+"," +
             "\n Виробник: "+producer+"," +
             "\n  Кількість: "+quantity+","+
-            "\n  Ціна за одиницю: "+price+"грн\n";
+            "\n  Ціна за одиницю: "+price+" грн\n";
   }
 
   /**
@@ -94,6 +94,6 @@ public class Product {
             "<br><b>Опис:</b> "+description+"," +
             "<br><b>Виробник:</b> "+producer+"," +
             "<br><b>Кількість:</b> "+quantity+","+
-            "<br><b>Ціна за одиницю:</b> "+price+"грн";
+            "<br><b>Ціна за одиницю:</b> "+price+" грн";
   }
 }

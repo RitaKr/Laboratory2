@@ -22,6 +22,8 @@ public class Main {
         factory.addMoreOfProduct("Pollen", 6);
         factory.showAllProductsByGroup("Ліжка");
         factory.showAllProducts();
+        System.out.println(factory.findProduct("95 см", "description"));
+        System.out.println(factory.findProduct(9, "quantity"));
 
     }
 

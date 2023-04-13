@@ -62,6 +62,8 @@ class UI extends JFrame {
         //add(mainPanel, BorderLayout.CENTER);
         JScrollPane scroller = new JScrollPane(mainPanel);
         scroller.setBorder(null);
+        scroller.getVerticalScrollBar().setUnitIncrement(16);
+        scroller.getHorizontalScrollBar().setUnitIncrement(16);
         add(scroller);
 
         //setting submit button
@@ -138,6 +140,11 @@ class UI extends JFrame {
         label.setForeground(white);
         label.setHorizontalAlignment(SwingConstants.CENTER);
     }
+    public void styleSpinner(JSpinner spinner){
+        spinner.setFont(font3);
+        JFormattedTextField textField = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
+        textField.setHorizontalAlignment(JTextField.LEFT);
+    }
     public JPanel createProductPanel(String productInfo) {
         JPanel productPanel = new JPanel();
         productPanel.setBackground(col4);
@@ -171,6 +178,8 @@ class MenuUI extends UI {
     JButton addProductButton = new JButton("Додати товар");
     JButton editProductButton = new JButton("Редагувати товар");
     JButton deleteProductButton = new JButton("Видалити товар");
+    JButton addMoreProductButton = new JButton("Поставка товару");
+    JButton sellProductButton = new JButton("Списання товару");
     JLabel label = new JLabel("Оберіть пункт меню:", JLabel.CENTER);
 
     MenuUI(Factory factory){
@@ -185,6 +194,8 @@ class MenuUI extends UI {
         styleMenuButton(addProductButton);
         styleMenuButton(editProductButton);
         styleMenuButton(deleteProductButton);
+        styleMenuButton(addMoreProductButton);
+        styleMenuButton(sellProductButton);
 
 
         styleLabel(label);
@@ -207,12 +218,14 @@ class MenuUI extends UI {
 
 
         productManipulations.setBorder(new TitledBorder(BorderFactory.createLineBorder(white, 1), "Робота з товарами", TitledBorder.CENTER, TitledBorder.TOP, font3, white));
-        productManipulations.setPreferredSize(new Dimension(280, 165));
+        productManipulations.setPreferredSize(new Dimension(280, 255));
         productManipulations.setBackground(col3);
         productManipulations.setForeground(white);
         productManipulations.add(addProductButton, BorderLayout.CENTER);
         productManipulations.add(editProductButton, BorderLayout.CENTER);
         productManipulations.add(deleteProductButton, BorderLayout.CENTER);
+        productManipulations.add(addMoreProductButton, BorderLayout.CENTER);
+        productManipulations.add(sellProductButton, BorderLayout.CENTER);
 
         mainPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
         gbc.insets = new Insets(5, 0, 5, 0);
@@ -269,6 +282,46 @@ class MenuUI extends UI {
                 ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Редагування групи товарів", factory, "edit");
                 chooseGroupUI.setVisible(true);
 
+            }
+        });
+        addProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                AddProductUI addProductUI = new AddProductUI(factory);
+                addProductUI.setVisible(true);
+            }
+        });
+        editProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                ChooseProductUI chooseProductUI = new ChooseProductUI("Редагування товару", factory, "edit");
+                chooseProductUI.setVisible(true);
+            }
+        });
+        deleteProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                ChooseProductUI chooseProductUI = new ChooseProductUI("Видалення товару", factory, "delete");
+                chooseProductUI.setVisible(true);
+            }
+        });
+        addMoreProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                ChooseProductUI chooseProductUI = new ChooseProductUI("Поставка товару", factory, "addMore");
+//                chooseProductUI.setVisible(true);
+            }
+        });
+        sellProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                ChooseProductUI chooseProductUI = new ChooseProductUI("Списання товару", factory, "sell");
+//                chooseProductUI.setVisible(true);
             }
         });
     }
@@ -361,8 +414,8 @@ class ChooseGroupUI extends UI {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         switch (action) {
-//
-//
+
+
 //                        case "addProduct":
 //                            addProductUI = new AddProductUI(groupsArr.get(i).getName(), factory);
 //                            addProductUI.setVisible(true);
@@ -378,7 +431,7 @@ class ChooseGroupUI extends UI {
                                 if (confirm == 0) {
                                     JOptionPane.showMessageDialog(ChooseGroupUI.super.rootPane, factory.deleteProductsGroup(group.getName()), "Результат видалення групи", JOptionPane.PLAIN_MESSAGE);
                                     dispose();
-                                    ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Інформація по групі товарів", factory, "delete");
+                                    ChooseGroupUI chooseGroupUI = new ChooseGroupUI("Видалення групи товарів", factory, "delete");
                                     chooseGroupUI.setVisible(true);
                                 }
                                 break;
@@ -560,14 +613,335 @@ class EditGroupUI extends UI {
     }
 
 }
+
+class AddProductUI extends UI {
+    JLabel groupName = new JLabel("Введіть назву групи:");
+    JTextField groupField = new JTextField(20);
+    JLabel nameLabel = new JLabel("Введіть назву товару:");
+    JTextField nameField = new JTextField(20);
+    JLabel descriptionLabel = new JLabel("Введіть опис товару:");
+    JTextArea descriptionField = new JTextArea(6, 20);
+    JLabel productionName = new JLabel("Введіть країну-виробника:");
+    JTextField productionField = new JTextField(20);
+
+    JLabel quantityLabel = new JLabel("Кількість товару:");
+    JLabel priceLabel = new JLabel("Ціна товару:");
+
+    int val=0;
+    int val2=3000;
+
+    SpinnerModel spinnerModel = new SpinnerNumberModel(val, 0, 100000, 1);
+    JSpinner quantitySpinner = new JSpinner(spinnerModel);
+
+    SpinnerModel model = new SpinnerNumberModel(val2, 3000, 100000, 500);
+    JSpinner priceSpinner = new JSpinner(model);
+
+    JButton submit = new JButton("Створити товар");
+
+    public void styleTextField(Component component) {
+        component.setFont(font3);
+        component.setForeground(white);
+        component.setBackground(white1);
+    }
+
+    public AddProductUI(Factory factory) {
+        super(factory);
+        setVisible(false);
+        mainLabel.setText("Додавання товару");
+
+        styleLabel(groupName, SwingConstants.LEFT);
+        styleLabel(nameLabel, SwingConstants.LEFT);
+        styleLabel(descriptionLabel, SwingConstants.LEFT);
+        styleLabel(productionName, SwingConstants.LEFT);
+        styleLabel(quantityLabel, SwingConstants.LEFT);
+        styleLabel(priceLabel, SwingConstants.LEFT);
+
+        styleSpinner(quantitySpinner);
+        styleSpinner(priceSpinner);
+
+        styleTextField(groupField);
+        groupField.setMargin(new Insets(10, 10, 10,10));
+
+        styleTextField(nameField);
+        nameField.setMargin(new Insets(10, 10, 10, 10));
+
+        styleTextField(descriptionField);
+        descriptionField.setMargin(new Insets(10, 10, 10, 10));
+        descriptionField.setLineWrap(true);
+
+        styleTextField(productionField);
+        productionField.setMargin(new Insets(10,10,10,10));
+
+        styleItemButton(submit);
+
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        mainPanel.add(groupName, gbc);
+        mainPanel.add(groupField, gbc);
+        mainPanel.add(nameLabel, gbc);
+        mainPanel.add(nameField, gbc);
+        mainPanel.add(descriptionLabel, gbc);
+        mainPanel.add(descriptionField, gbc);
+        mainPanel.add(productionName, gbc);
+        mainPanel.add(productionField, gbc);
+        mainPanel.add(quantityLabel, gbc);
+        mainPanel.add(quantitySpinner, gbc);
+        mainPanel.add(priceLabel,gbc);
+        mainPanel.add(priceSpinner, gbc);
+        mainPanel.add(submit, gbc);
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String group=groupField.getText();
+                String name = nameField.getText();
+                String description = descriptionField.getText();
+                String producer = productionField.getText();
+                int quantity = (int)quantitySpinner.getValue();
+                int price = (int)priceSpinner.getValue();
+                if(group.equals("")){
+                    JOptionPane.showMessageDialog(AddProductUI.super.rootPane, "Введіть назву групи!", "Заповніть всі поля!", JOptionPane.ERROR_MESSAGE);
+                }
+                if (name.equals("")) {
+                    JOptionPane.showMessageDialog(AddProductUI.super.rootPane, "Введіть назву товару!", "Заповніть всі поля!", JOptionPane.ERROR_MESSAGE);
+                }
+                if (description.equals("")) {
+                    JOptionPane.showMessageDialog(AddProductUI.super.rootPane, "Введіть опис товару!", "Заповніть всі поля!", JOptionPane.ERROR_MESSAGE);
+                }
+                if(producer.equals("")){
+                    JOptionPane.showMessageDialog(AddProductUI.super.rootPane, "Введіть країну-виробника!", "Заповніть всі поля!", JOptionPane.ERROR_MESSAGE);
+                }
+                if (!group.equals("")&&!name.equals("") && !description.equals("")&&!producer.equals("")) {
+                    int confirm = JOptionPane.showConfirmDialog(AddProductUI.super.rootPane, "Ви впевнені, що хочете створити товар " + name + "?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
+                    if (confirm == 0) {
+                        JOptionPane.showMessageDialog(AddProductUI.super.rootPane, factory.addProduct(group, name, description, producer, quantity, price), "Додавання товару", JOptionPane.PLAIN_MESSAGE);
+                        groupField.setText("");
+                        nameField.setText("");
+                        descriptionField.setText("");
+                        productionField.setText("");
+                        quantitySpinner.setValue(val);
+                        priceSpinner.setValue(val2);
+
+                    }
+                }
+            }
+        });
+
+
+    }
+}
+
+class ChooseProductUI extends UI{
+    JLabel label = new JLabel();
+    JPanel productsPanel = new JPanel();
+    ArrayList<Product> productsArr;
+    String action;
+
+    public ChooseProductUI(String title,  Factory factory, String action) {
+        super(factory);
+        this.productsArr = factory.getAllProducts();
+        this.action = action;
+        mainLabel.setText(title);
+
+        label.setText("Оберіть товар:");
+        styleLabel(label);
+        mainPanel.add(label, gbc);
+
+        generateButtons();
+
+        productsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        productsPanel.setBackground(col3);
+        gbc.insets = new Insets(10, 10, 10, 10);
+        mainPanel.add(productsPanel, gbc);
+
+    }
+    private void generateButtons(){
+        if (productsArr.isEmpty()) {
+            label.setText("На складі нема жодного товару");
+            gbc.insets = new Insets(10, 10, 10, 10);
+            mainPanel.add(label, gbc);
+            JButton addProductButton = new JButton("Додати товар");
+            styleMenuButton(addProductButton);
+
+            addProductButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    AddProductUI addProductUI = new AddProductUI(factory);
+                    addProductUI.setVisible(true);
+                    dispose();
+                }
+            });
+            mainPanel.add(addProductButton, gbc);
+        } else {
+            for (Product product : productsArr) {
+                JButton button = new JButton(product.getName());
+                styleItemButton(button);
+                productsPanel.add(button, gbc);
+
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        switch (action) {
+
+
+                            case "edit":
+                                EditProductUI editProductUI = new EditProductUI(product, factory);
+                                editProductUI.setVisible(true);
+                                dispose();
+                                break;
+                            case "delete":
+                                int confirm = JOptionPane.showConfirmDialog(ChooseProductUI.super.rootPane, "Ви впевнені, що хочете видалити " + product.getName() + "?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
+                                if (confirm == 0) {
+                                    JOptionPane.showMessageDialog(ChooseProductUI.super.rootPane, factory.deleteProduct(product.getName()), "Результат видалення товару", JOptionPane.PLAIN_MESSAGE);
+                                    dispose();
+                                    ChooseProductUI chooseProductUI = new ChooseProductUI("Видалення товару", factory, "delete");
+                                    chooseProductUI.setVisible(true);
+                                }
+                                break;
+
+                        }
+                    }
+                });
+
+
+            }
+        }
+    }
+
+}
+
+class EditProductUI extends UI{
+
+    JLabel label = new JLabel("Обраний товар:");
+    JPanel productInfoPanel;
+
+    JPanel buttonsPanel = new JPanel();
+    JLabel choseLabel = new JLabel("Оберіть дію:");
+
+    JButton editGroup = new JButton("Змінити групу");
+    JButton editName = new JButton("Змінити назву");
+    JButton editDescription = new JButton("Змінити опис");
+    JButton editProducer = new JButton ("Змінити країну-виробника");
+    JButton editPrice = new JButton("Змінити ціну");
+    Product product;
+
+    public EditProductUI(Product product, Factory factory){
+        super(factory);
+        this.product = product;
+        setVisible(false);
+        mainLabel.setText("Редагування товару");
+
+        styleLabel(label);
+        String info = "<b>Назва:</b> " + product.getName() + "," +
+                "<br><b>Опис:</b> "+product.getDescription()+"," +
+                "<br><b>Виробник:</b> "+product.getProducer()+"," +
+                "<br><b>Кількість:</b> "+product.getQuantity()+","+
+                "<br><b>Ціна за одиницю:</b> "+product.getPrice()+" грн";
+        productInfoPanel = createProductPanel(info,400);
+        styleLabel(choseLabel);
+
+        styleMenuButton(editGroup);
+        styleMenuButton(editName);
+        styleMenuButton(editDescription);
+        styleMenuButton(editProducer);
+        styleMenuButton(editPrice);
+
+        gbc.insets = new Insets(5, 10, 5, 10);
+
+        buttonsPanel.setLayout(new GridBagLayout());
+        buttonsPanel.setBackground(col3);
+        buttonsPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
+        buttonsPanel.add(choseLabel, gbc);
+        buttonsPanel.add(editGroup, gbc);
+        buttonsPanel.add(editName, gbc);
+        buttonsPanel.add(editDescription, gbc);
+        buttonsPanel.add(editProducer, gbc);
+        buttonsPanel.add(editPrice, gbc);
+
+        mainPanel.add(label, gbc);
+        mainPanel.add(productInfoPanel, gbc);
+        mainPanel.add(buttonsPanel, gbc);
+
+        editGroup.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editProduct("", "Введіть нову назву для групи товару "+product.getName(), "Ви впевнені, що хочете змінити назву \""+product.getGroup()+"\"", "group");
+            }
+        });
+        editName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editProduct("", "Введіть нову назву  товару "+product.getName(), "Ви впевнені, що хочете змінити назву \""+product.getName()+"\"", "name");
+            }
+        });
+        editDescription.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editProduct("", "Введіть новий опис для товару "+product.getName(),"Ви впевнені, що хочете змінити опис \""+product.getDescription()+"\"", "description");
+            }
+
+        });
+
+        editProducer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editProduct("", "Введіть нову назву країни-виробника "+product.getName(),"Ви впевнені, що хочете змінити країну-виробника \""+product.getProducer()+"\"", "producer");
+            }
+        });
+        editPrice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editProduct("", "Введіть нову ціну товару "+product.getName(),"Ви впевнені, що хочете змінити ціну \""+product.getPrice()+"\"", "price");
+            }
+        });
+
+    }
+
+    /**
+     * Method that shows dialog windows to change fields of products group
+     * @param value starting value of input
+     * @param message1 message that will be displayed in the dialog window (asking for new value)
+     * @param message2 message that will be displayed in the confirmation window (are you sure?)
+     * @param mode "name", "description" - determines which value will be changed
+     */
+    private void editProduct(String value, String message1, String message2, String mode){
+        String newValue = JOptionPane.showInputDialog(EditProductUI.super.rootPane, message1,value);
+        if (newValue!=null && newValue.equals("")) {
+            JOptionPane.showMessageDialog(EditProductUI.super.rootPane, "Ви не ввели нічого!", "Поле не заповнене!", JOptionPane.ERROR_MESSAGE);
+            editProduct("", message1, message2, mode);
+        } else if (newValue!=null) {
+            int confirm = JOptionPane.showConfirmDialog(EditProductUI.super.rootPane, message2+" на \""+newValue+"\"?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
+            if (confirm == 0) {
+                String result = factory.editProduct(product.getName(), newValue, mode);
+                JOptionPane.showMessageDialog(EditProductUI.super.rootPane, result, "Операція пройшла успішно!", JOptionPane.PLAIN_MESSAGE);
+                dispose();
+                EditProductUI editProductUI = new EditProductUI(product, factory);
+                editProductUI.setVisible(true);
+
+            } else {
+                editProduct(newValue, message1, message2, mode);
+            }
+        }
+    }
+
+}
+
+
+
+
 public class Program {
     static Factory factory;
     static MenuUI menuUI;
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
         factory = new Factory();
         System.out.println(factory);
         init();
+
     }
     private static void init(){
 
@@ -576,7 +950,7 @@ public class Program {
         menuUI.setVisible(true);
 //        new intInputDialog(menuUI, "Зміна ціни товару", "Введіть нову ціну товару pollen:", "editPrice", "pollen");
 //        new intInputDialog(menu, "Списання товару", "Скільки шт. pollen продали?",  Factory.findProduct("pollen").getQuantity(), "sell", "pollen");
-//        new intInputDialog(menu, "Додавання товару", "Скільки шт. pollen прибуло на склад?", "add", "pollen");
+//        new intInputDialog(menu, "Додавання товару", "Скільки шт. pollen прибуло на склад?", "addMore", "pollen");
 //        System.out.println(factory);
     }
 }

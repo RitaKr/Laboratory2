@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -70,7 +72,6 @@ public class Factory {
             numberOfProducts += pg.getNumberOfProducts();
             numberOfProductsGroups++;
         }
-
         allProducts=new ArrayList<>(numberOfProducts);
         for (ProductsGroup pg: productsGroups) {
             ArrayList<Product> products = pg.getProducts();
@@ -78,7 +79,13 @@ public class Factory {
                 allProducts.add(products.get(i));
             }
             //nProducts+=pg.getNumberOfProducts();
-
+            try {
+                FileWriter writer = new FileWriter("Factory.txt");
+                writer.write(toStr());
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -492,7 +499,7 @@ public class Factory {
      * Метод виводу інформації по складу
      * @return інформація по складу
      */
-    public String toString(){
+    public static String toStr(){
         String pgString="";
         for (int i = 0; i<numberOfProductsGroups; i++){
             pgString+=(i+1)+". "+ productsGroups.get(i)+"\n";

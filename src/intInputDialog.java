@@ -28,20 +28,20 @@ public class intInputDialog {
      * @param frame       JFrame of the main program
      * @param windowTitle window's title
      * @param label       text that will be displayed inside of window
-     * @param method      "editPrice", "add", "sell" - parameters that determine which method will be performed on OK click
+     * @param method      "editPrice", "addMore", "sell" - parameters that determine which method will be performed on OK click
      * @param productName name of the product that method interacts with
      */
     intInputDialog(JFrame frame, String windowTitle, String label, String method, String productName) {
         spinnerModel = new SpinnerNumberModel(1, 1, 10000000, 1);
-        cheateDialog(frame, windowTitle, label, method, productName);
+        createDialog(frame, windowTitle, label, method, productName);
     }
 
     intInputDialog(JFrame frame, String windowTitle, String label, int max, String method, String productName) {
         spinnerModel = new SpinnerNumberModel(1, 1, max, 1);
-        cheateDialog(frame, windowTitle, label, method, productName);
+        createDialog(frame, windowTitle, label, method, productName);
     }
 
-    private void cheateDialog(JFrame frame, String windowTitle, String label, String method, String productName) {
+    private void createDialog(JFrame frame, String windowTitle, String label, String method, String productName) {
         JDialog dialog = new JDialog(frame, true);
         dialog.setLayout(new FlowLayout());
         JLabel displayText = new JLabel(label);
@@ -60,7 +60,7 @@ public class intInputDialog {
                         case "editPrice" -> {
                             result = Program.factory.editProduct(productName, value);
                         }
-                        case "add" -> {
+                        case "addMore" -> {
                             result = Program.factory.addMoreOfProduct(productName, value);
                         }
                         case "sell" -> {
