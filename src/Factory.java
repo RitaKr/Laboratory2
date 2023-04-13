@@ -119,10 +119,15 @@ public class Factory {
         if (productsGroups.contains(findProductsGroup(name))) {
             ProductsGroup group = findProductsGroup(name);
             if (mode.equalsIgnoreCase("name")){
-                group.setName(newData);
-                for (Product p:group.getProducts()) {
-                    p.setGroup(newData);
+                if (!productsGroups.contains(findProductsGroup(name))) {
+                    group.setName(newData);
+                    for (Product p:group.getProducts()) {
+                        p.setGroup(newData);
+                    }
+                } else {
+                    return "Група товарів з назвою "+newData+" вже існує на складі! Неможливо застосувати зміну";
                 }
+
 
             } else if (mode.equalsIgnoreCase("description")) {
                 group.setDescription(newData);
@@ -195,7 +200,11 @@ public class Factory {
             if (allProducts.contains(findProduct(name))) {
                 Product product = findProduct(name);
                 if (mode.equalsIgnoreCase("name")) {
-                    product.setName(newData);
+                    if (!allProducts.contains(findProduct(name))) {
+                        product.setName(newData);
+                    } else {
+                        return "Товар з назвою "+newData+" вже існує на складі! Неможливо застосувати зміну";
+                    }
                 } else if (mode.equalsIgnoreCase("description")) {
                     product.setDescription(newData);
                 } else if (mode.equalsIgnoreCase("producer")) {

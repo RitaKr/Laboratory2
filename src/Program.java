@@ -676,43 +676,64 @@ class AddProductUI extends UI {
         setVisible(false);
         mainLabel.setText("Додавання товару");
 
-        styleLabel(groupName, SwingConstants.LEFT);
-        styleLabel(nameLabel, SwingConstants.LEFT);
-        styleLabel(descriptionLabel, SwingConstants.LEFT);
-        styleLabel(productionName, SwingConstants.LEFT);
-        styleLabel(quantityLabel, SwingConstants.LEFT);
-        styleLabel(priceLabel, SwingConstants.LEFT);
+        if (factory.getProductsGroups().isEmpty()) {
+            JLabel label = new JLabel("На складі нема жодної групи товарів");
+            styleLabel(label);
+            gbc.insets = new Insets(10, 10, 10, 10);
+            mainPanel.add(label, gbc);
+            JButton addGroupButton = new JButton("Додати групу товарів");
+            styleMenuButton(addGroupButton);
 
-        styleSpinner(quantitySpinner);
-        styleSpinner(priceSpinner);
+            addGroupButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    AddGroupUI addGroupUI = new AddGroupUI(factory);
+                    addGroupUI.setVisible(true);
+                    dispose();
+                }
+            });
+            mainPanel.add(addGroupButton, gbc);
+        } else {
+            styleLabel(groupName, SwingConstants.LEFT);
+            styleLabel(nameLabel, SwingConstants.LEFT);
+            styleLabel(descriptionLabel, SwingConstants.LEFT);
+            styleLabel(productionName, SwingConstants.LEFT);
+            styleLabel(quantityLabel, SwingConstants.LEFT);
+            styleLabel(priceLabel, SwingConstants.LEFT);
 
-        styleComboBox(groupComboBox);
+            styleSpinner(quantitySpinner);
+            styleSpinner(priceSpinner);
 
-        fillComboBox();
+            styleComboBox(groupComboBox);
 
-        styleTextField(nameField);
+            fillComboBox();
 
-        styleTextField(descriptionField);
+            styleTextField(nameField);
 
-        styleTextField(productionField);
+            styleTextField(descriptionField);
 
-        styleItemButton(submit);
+            styleTextField(productionField);
 
-        gbc.insets = new Insets(10, 10, 10, 10);
+            styleItemButton(submit);
 
-        mainPanel.add(groupName, gbc);
-        mainPanel.add(groupComboBox, gbc);
-        mainPanel.add(nameLabel, gbc);
-        mainPanel.add(nameField, gbc);
-        mainPanel.add(descriptionLabel, gbc);
-        mainPanel.add(descriptionField, gbc);
-        mainPanel.add(productionName, gbc);
-        mainPanel.add(productionField, gbc);
-        mainPanel.add(quantityLabel, gbc);
-        mainPanel.add(quantitySpinner, gbc);
-        mainPanel.add(priceLabel,gbc);
-        mainPanel.add(priceSpinner, gbc);
-        mainPanel.add(submit, gbc);
+            gbc.insets = new Insets(10, 10, 10, 10);
+
+            mainPanel.add(groupName, gbc);
+            mainPanel.add(groupComboBox, gbc);
+            mainPanel.add(nameLabel, gbc);
+            mainPanel.add(nameField, gbc);
+            mainPanel.add(descriptionLabel, gbc);
+            mainPanel.add(descriptionField, gbc);
+            mainPanel.add(productionName, gbc);
+            mainPanel.add(productionField, gbc);
+            mainPanel.add(quantityLabel, gbc);
+            mainPanel.add(quantitySpinner, gbc);
+            mainPanel.add(priceLabel,gbc);
+            mainPanel.add(priceSpinner, gbc);
+            mainPanel.add(submit, gbc);
+        }
+
+
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -986,13 +1007,8 @@ public class Program {
 
     }
     private static void init(){
-
         menuUI = new MenuUI(factory);
-
         menuUI.setVisible(true);
-//        new intInputDialog(menuUI, "Зміна ціни товару", "Введіть нову ціну товару pollen:", "editPrice", "pollen");
-//        new intInputDialog(menu, "Списання товару", "Скільки шт. pollen продали?",  Factory.findProduct("pollen").getQuantity(), "sell", "pollen");
-//        new intInputDialog(menu, "Додавання товару", "Скільки шт. pollen прибуло на склад?", "addMore", "pollen");
-//        System.out.println(factory);
+
     }
 }
