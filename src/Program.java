@@ -785,12 +785,12 @@ class AddProductUI extends UI {
     JLabel priceLabel = new JLabel("Ціна товару:");
 
     int val=0;
-    int val2=3000;
+    int val2=1000;
 
     SpinnerModel spinnerModel = new SpinnerNumberModel(val, 0, 100000, 1);
     JSpinner quantitySpinner = new JSpinner(spinnerModel);
 
-    SpinnerModel model = new SpinnerNumberModel(val2, 3000, 100000, 500);
+    SpinnerModel model = new SpinnerNumberModel(val2, 1000, 100000, 500);
     JSpinner priceSpinner = new JSpinner(model);
 
     JButton submit = new JButton("Створити товар");
