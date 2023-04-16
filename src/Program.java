@@ -265,6 +265,15 @@ class MenuUI extends UI {
 
         toMenu.setVisible(false);
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SearchProductUI SearchProductUI = new SearchProductUI(factory, "name");
+                SearchProductUI.setVisible(true);
+                dispose();
+            }
+        });
+
         factoryStatsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -481,6 +490,42 @@ class ChooseGroupUI extends UI {
         }
     }
 }
+
+class SearchProductUI extends UI{
+
+    JTextField searchField = new JTextField(20);
+    JButton searchButton = new JButton("Пошук");
+    ArrayList<Product> searchResult;
+
+
+    public SearchProductUI (Factory factory, String mode){
+        super(factory);
+        setVisible(false);
+        mainLabel.setText("Пошук товарів");
+        styleTextField(searchField);
+        searchField.setMargin(new Insets(10, 10, 10, 10));
+        styleItemButton(searchButton);
+
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        mainPanel.setBorder(new EmptyBorder(10, 40, 10, 40));
+        mainPanel.add(searchField, gbc);
+        mainPanel.add(searchButton, gbc);
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = searchField.getText();
+                if (name.equals("")) {
+                    JOptionPane.showMessageDialog(SearchProductUI.super.rootPane, "Введіть пошуковий запит!", "Помилка!", JOptionPane.ERROR_MESSAGE);
+                } else {
+
+
+                }
+            }
+
+    })
+;};}
 
 class AddGroupUI extends UI {
     JLabel nameLabel = new JLabel("Введіть назву групи:");
@@ -873,7 +918,6 @@ class EditProductUI extends UI{
 
     JLabel label = new JLabel("Обраний товар:");
     JPanel productInfoPanel;
-
     JPanel buttonsPanel = new JPanel();
     JLabel choseLabel = new JLabel("Оберіть дію:");
 

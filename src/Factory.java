@@ -294,7 +294,7 @@ public class Factory {
     public static ArrayList<Product> findProduct(String search, String mode) {
         ArrayList<Product> products = new ArrayList<>();
         for (Product pr:allProducts) {
-            if (pr.getGroup().equalsIgnoreCase(search) && mode.equalsIgnoreCase("group") || pr.getProducer().equalsIgnoreCase(search) && mode.equalsIgnoreCase("producer")){
+            if (pr.getName().equalsIgnoreCase(search)&&mode.equalsIgnoreCase("name")||pr.getGroup().equalsIgnoreCase(search) && mode.equalsIgnoreCase("group") || pr.getProducer().equalsIgnoreCase(search) && mode.equalsIgnoreCase("producer")){
                 products.add(pr);
                 //System.out.println(pr);
             }
