@@ -90,10 +90,11 @@ public class Product {
    * @return інформація про товар
    */
   public String toStringUI() {
-    return "<b>Назва:</b> " + name + "," +
-            "<br><b>Опис:</b> "+description+"," +
-            "<br><b>Виробник:</b> "+producer+"," +
-            "<br><b>Кількість:</b> "+quantity+","+
-            "<br><b>Ціна за одиницю:</b> "+price+" грн";
+    return "<b>Назва:</b> " + name + "" +
+            "<br><b>Опис:</b> "+description+"" +
+            "<br><b>Виробник:</b> "+producer+"" +
+            "<br><b>Кількість:</b> "+quantity+""+
+            "<br><b>Ціна за одиницю:</b> "+price+" грн" +
+            "<br><b>Належить до групи:</b> "+group+"";
   }
 }

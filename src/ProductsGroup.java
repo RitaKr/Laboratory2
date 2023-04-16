@@ -91,7 +91,7 @@ public class ProductsGroup {
       for (Product p:products) {
         totalCost+=(p.getQuantity()*p.getPrice());
       }
-      System.out.println("Загальна вартість товару групи товарів "+name+" становить "+totalCost+" грн\n");
+      //System.out.println("Загальна вартість товару групи товарів "+name+" становить "+totalCost+" грн\n");
       return ""+totalCost+" грн\n";
 
 

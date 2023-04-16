@@ -1,7 +1,9 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Клас Factory.java, що містить основну інформацію про склад та методи для роботи
@@ -12,6 +14,7 @@ public class Factory {
     private static ArrayList<Product> allProducts;
     private static int numberOfProductsGroups = 0;
     private static int numberOfProducts = 0;
+    static Locale ua = new Locale("uk", "UA");
 
     public static ArrayList<Product> getAllProducts() {
         return allProducts;
@@ -41,7 +44,7 @@ public class Factory {
         new Product("Trusty","Стілець, виготовлений з масиву сосни","Польща",15,1750),
         new Product("Kooked","Стілець із основою виготовленою з фанери та сталі, оббитий тканиною","Швеція",20,1650),
         new Product("Ejby","Білий стілець із масиву сосни","Швеція",15,1850),
-        new Product("Kooked","Стілець із дубу","Польща",25,2500)
+        new Product("Artem","Стілець із дубу","Україна",25,2000)
     )));
 
     private ProductsGroup cupboards = new ProductsGroup("Шафи","Ергономічне зберігання - шафа у вашій оселі", new ArrayList<>(Arrays.asList(
@@ -79,13 +82,13 @@ public class Factory {
                 allProducts.add(products.get(i));
             }
             //nProducts+=pg.getNumberOfProducts();
-            try {
-                FileWriter writer = new FileWriter("Factory.txt");
-                writer.write(toStr());
-                writer.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        }
+        try {
+            FileWriter writer = new FileWriter("Factory.txt");
+            writer.write(toStr());
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -100,10 +103,10 @@ public class Factory {
         if (!productsGroups.contains(findProductsGroup(name))) {
             productsGroups.add(new ProductsGroup(name, description));
             updateStock();
-            System.out.println("Групу товарів "+name+" додано!\n");
+            //System.out.println("Групу товарів "+name+" додано!\n");
             return "Групу товарів "+name+" додано!\n";
         } else {
-            System.out.println("Група товарів "+name+" вже існує на складі! Групу не додано\n");
+            //System.out.println("Група товарів "+name+" вже існує на складі! Групу не додано\n");
             return "Група товарів "+name+" вже існує на складі! Групу не додано\n";
         }
     }
@@ -134,12 +137,12 @@ public class Factory {
             } else {
                 return "Invalid argument!\n";
             }
-            System.out.println(allProducts);
+            //System.out.println(allProducts);
             updateStock();
-            System.out.println("Групу товарів "+name+" відредаговано!\n");
+            //System.out.println("Групу товарів "+name+" відредаговано!\n");
             return "Групу товарів "+name+" відредаговано!\n";
         } else {
-            System.out.println("Група товарів "+name+" не існує на складі!\n");
+            //System.out.println("Група товарів "+name+" не існує на складі!\n");
             return "Група товарів "+name+" не існує на складі!\n";
         }
     }
@@ -153,10 +156,11 @@ public class Factory {
         if (productsGroups.contains(findProductsGroup(name))) {
             productsGroups.remove(findProductsGroup(name));
             updateStock();
-            System.out.println("Групу товарів "+name+" видалено!\n");
+            //System.out.println("Групу товарів "+name+" видалено!\n");
+            //System.out.println(this);
             return "Групу товарів "+name+" видалено!\n";
         } else {
-            System.out.println("Група товарів "+name+" не існує на складі!\n");
+            //System.out.println("Група товарів "+name+" не існує на складі!\n");
             return "Група товарів "+name+" не існує на складі!\n";
         }
     }
@@ -179,7 +183,7 @@ public class Factory {
                 updateStock();
                 return "Товар "+name+" додано до групи товарів "+groupName+"\n";
             } else {
-                System.out.println("Товар "+name+" вже існує на складі!\n");
+                //System.out.println("Товар "+name+" вже існує на складі!\n");
                 return "Товар "+name+" вже існує на складі!\n";
             }
         } else {
@@ -217,7 +221,7 @@ public class Factory {
                         addProduct(newData, product.getName(), product.getDescription(), product.getProducer(), product.getQuantity(), product.getPrice());
                         //product.setGroup(newData);
                     } else{
-                        System.out.println("Група товарів "+newData+" не існує на складі! Переміщення неможливе\n");
+                        //System.out.println("Група товарів "+newData+" не існує на складі! Переміщення неможливе\n");
                         return "Група товарів "+newData+" не існує на складі! Переміщення неможливе\n";
                     }
                 }else {
@@ -225,10 +229,10 @@ public class Factory {
                 }
 
                 updateStock();
-                System.out.println("Товар " + name + " відредаговано!\n");
+                //System.out.println("Товар " + name + " відредаговано!\n");
                 return "Товар " + name + " відредаговано!\n";
             } else {
-                System.out.println("Товар "+name+" не існує на складі!\n");
+                //System.out.println("Товар "+name+" не існує на складі!\n");
                 return "Товар "+name+" не існує на складі!\n";
             }
         }
@@ -244,10 +248,10 @@ public class Factory {
             product.setPrice(newData);
 
             updateStock();
-            System.out.println("Товар " + name + " відредаговано!\n");
+            //System.out.println("Товар " + name + " відредаговано!\n");
             return "Товар " + name + " відредаговано!\n";
         } else {
-            System.out.println("Товар "+name+" не існує на складі!\n");
+            //System.out.println("Товар "+name+" не існує на складі!\n");
             return "Товар "+name+" не існує на складі!\n";
         }
     }
@@ -266,10 +270,10 @@ public class Factory {
             group.setNumberOfProducts(products.size());
             updateStock();
 
-            System.out.println("Товар " + name + " видалено!\n");
+            //System.out.println("Товар " + name + " видалено!\n");
             return "Товар " + name + " видалено!\n";
         } else {
-            System.out.println("Товар "+name+" не існує на складі!\n");
+            //System.out.println("Товар "+name+" не існує на складі!\n");
             return "Товар "+name+" не існує на складі!\n";
         }
     }
@@ -284,22 +288,26 @@ public class Factory {
         for (Product pr:allProducts) {
             if (pr.getName().equalsIgnoreCase(name)){
                 product = pr;
-                //System.out.println(product);
+                ////System.out.println(product);
             }
         }
-        //System.out.println("no matches found");
+        ////System.out.println("no matches found");
         return product;
 
     }
     public static ArrayList<Product> findProduct(String search, String mode) {
         ArrayList<Product> products = new ArrayList<>();
         for (Product pr:allProducts) {
-            if (pr.getName().equalsIgnoreCase(search)&&mode.equalsIgnoreCase("name")||pr.getGroup().equalsIgnoreCase(search) && mode.equalsIgnoreCase("group") || pr.getProducer().equalsIgnoreCase(search) && mode.equalsIgnoreCase("producer")){
+            if (pr.getName().toLowerCase(ua).contains(search.toLowerCase(ua)) && mode.equalsIgnoreCase("Пошук за іменем")
+                    ||pr.getGroup().toLowerCase(ua).contains(search.toLowerCase(ua)) && mode.equalsIgnoreCase("Пошук за групою")
+                    ||pr.getDescription().toLowerCase(ua).contains(search.toLowerCase(ua)) && mode.equalsIgnoreCase("Пошук за описом")
+                    ||(""+pr.getPrice()+"").contains(search) && mode.equalsIgnoreCase("Пошук за ціною")
+                    || pr.getProducer().toLowerCase(ua).contains(search.toLowerCase(ua)) && mode.equalsIgnoreCase("Пошук за виробником")){
                 products.add(pr);
-                //System.out.println(pr);
+                ////System.out.println(pr);
             }
         }
-        //System.out.println("no matches found");
+        ////System.out.println("no matches found");
         return products;
 
     }
@@ -308,10 +316,10 @@ public class Factory {
         for (Product pr:allProducts) {
             if (pr.getPrice()==search && mode.equalsIgnoreCase("price") || pr.getQuantity()==search && mode.equalsIgnoreCase("quantity")){
                 products.add(pr);
-                //System.out.println(pr);
+                ////System.out.println(pr);
             }
         }
-        //System.out.println("no matches found");
+        ////System.out.println("no matches found");
         return products;
 
     }
@@ -340,11 +348,11 @@ public class Factory {
             //String s="Всі товари групи товарів "+groupName+": \n";
             ArrayList<String> products = new ArrayList<>();
             for (int i=0; i<numberOfProducts;i++){
-                products.add(""+(i+1)+") "+allProducts.get(i).toStringUI()+"<br><b>Належить до групи:</b> "+allProducts.get(i).getGroup());
+                products.add(""+(i+1)+") "+allProducts.get(i).toStringUI());
             }
-//            System.out.println("Інформація по групі товарів "+groupName+": ");
-//            System.out.println(pg);
-            //System.out.println(products);
+//            //System.out.println("Інформація по групі товарів "+groupName+": ");
+//            //System.out.println(pg);
+            ////System.out.println(products);
             return products;
         } else {
             System.out.print("Склад пустий.\n");
@@ -365,9 +373,9 @@ public class Factory {
             for (int i=0; i<pg.getProducts().size();i++){
                products.add(""+(i+1)+") "+pg.getProducts().get(i).toStringUI());
             }
-//            System.out.println("Інформація по групі товарів "+groupName+": ");
-//            System.out.println(pg);
-            //System.out.println(products);
+//            //System.out.println("Інформація по групі товарів "+groupName+": ");
+//            //System.out.println(pg);
+            ////System.out.println(products);
             return products;
         } else {
             System.out.print("Групи товарів "+groupName+" немає на складі.\n");
@@ -386,7 +394,7 @@ public class Factory {
                 totalCost+=(p.getQuantity()*p.getPrice());
             }
         }
-        System.out.println("Загальна вартість товару на складі становить "+totalCost+"грн\n");
+        //System.out.println("Загальна вартість товару на складі становить "+totalCost+"грн\n");
         return ""+totalCost+"грн\n";
     }
 
@@ -402,7 +410,7 @@ public class Factory {
             for (Product p:pg.getProducts()) {
                 totalCost+=(p.getQuantity()*p.getPrice());
             }
-            System.out.println("Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+" грн\n");
+            //System.out.println("Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+" грн\n");
             return ""+totalCost+" грн\n";
         } else {
             System.out.print("Групи товарів "+groupName+" немає на складі.\n");
@@ -422,10 +430,10 @@ public class Factory {
             product.setQuantity(product.getQuantity()+amount);
             updateStock();
 
-            System.out.println("Прийшло на склад товару " + name + " - "+amount+" штук.\n");
+            //System.out.println("Прийшло на склад товару " + name + " - "+amount+" штук.\n");
             return "Прийшло на склад товару " + name + " - "+amount+" штук.\n";
         } else {
-            System.out.println("Товар "+name+" не існує на складі!\n");
+            //System.out.println("Товар "+name+" не існує на складі!\n");
             return "Товар "+name+" не існує на складі!\n";
         }
     }
@@ -443,14 +451,14 @@ public class Factory {
                 product.setQuantity(product.getQuantity() - amount);
                 updateStock();
 
-                System.out.println("Продали товару " + name + " - " + amount + " штук.\n");
+                //System.out.println("Продали товару " + name + " - " + amount + " штук.\n");
                 return "Продали товару " + name + " - " + amount + " штук.\n";
             } else {
-                System.out.println("Неможливо продати " + amount + " штук товару " + name + ". Всього на складі - " + product.getQuantity() + "\n");
+                //System.out.println("Неможливо продати " + amount + " штук товару " + name + ". Всього на складі - " + product.getQuantity() + "\n");
                 return "Неможливо продати " + amount + " штук товару " + name + ". Всього на складі - " + product.getQuantity() + "\n";
             }
         } else {
-            System.out.println("Товар "+name+" не існує на складі!\n");
+            //System.out.println("Товар "+name+" не існує на складі!\n");
             return "Товар "+name+" не існує на складі!\n";
         }
     }
@@ -509,6 +517,21 @@ public class Factory {
      * @return інформація по складу
      */
     public static String toStr(){
+        String pgString="";
+        for (int i = 0; i<numberOfProductsGroups; i++){
+            pgString+=(i+1)+". "+ productsGroups.get(i)+"\n";
+        }
+        String ending="а";
+        if (numberOfProductsGroups %10>1 && numberOfProductsGroups %10<5 && !(numberOfProductsGroups >=12 && numberOfProductsGroups <=14)) ending="и";
+        else if ((numberOfProductsGroups >=5 && numberOfProductsGroups %10!=1) || numberOfProductsGroups ==11) ending="";
+        if (numberOfProductsGroups >0)
+            return "На складі є "+
+                    numberOfProductsGroups +" груп"+ending+" товарів. А саме: \n"+pgString;
+        else return  "На складі поки нема товарів";
+    }
+
+    @Override
+    public String toString(){
         String pgString="";
         for (int i = 0; i<numberOfProductsGroups; i++){
             pgString+=(i+1)+". "+ productsGroups.get(i)+"\n";
