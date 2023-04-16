@@ -187,7 +187,7 @@ public class Factory {
                 return "Товар "+name+" вже існує на складі!\n";
             }
         } else {
-            System.out.print("Групи товарів "+groupName+" немає на складі.\n");
+            //System.out.print("Групи товарів "+groupName+" немає на складі.\n");
             return "Групи товарів "+groupName+" немає на складі.\n";
         }
 
@@ -355,7 +355,7 @@ public class Factory {
             ////System.out.println(products);
             return products;
         } else {
-            System.out.print("Склад пустий.\n");
+            //System.out.print("Склад пустий.\n");
             return null;
         }
     }
@@ -378,7 +378,7 @@ public class Factory {
             ////System.out.println(products);
             return products;
         } else {
-            System.out.print("Групи товарів "+groupName+" немає на складі.\n");
+            //System.out.print("Групи товарів "+groupName+" немає на складі.\n");
             return null;
         }
     }
@@ -413,7 +413,7 @@ public class Factory {
             //System.out.println("Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+" грн\n");
             return ""+totalCost+" грн\n";
         } else {
-            System.out.print("Групи товарів "+groupName+" немає на складі.\n");
+            //System.out.print("Групи товарів "+groupName+" немає на складі.\n");
             return "Групи товарів "+groupName+" немає на складі.\n";
         }
 

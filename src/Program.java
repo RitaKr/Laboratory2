@@ -1,18 +1,13 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.event.*;
 import java.util.ArrayList;
+
+import static javax.swing.SwingConstants.LEFT;
 
 class UI extends JFrame {
     Factory factory;
@@ -22,25 +17,35 @@ class UI extends JFrame {
     GridBagConstraints gbc = new GridBagConstraints();
     static final Color col1 = new Color(69, 128, 206);
     static final  Color col2 = new Color(0, 0, 0);
-    final Color col3 = new Color(51, 48, 47);
-    final Color col4 = new Color(140, 73, 49);
-    final Color white = new Color(255, 255, 255);
-    final Color white1 = new Color(84, 79, 75, 255);
-    final Font font1 = new Font("Trebuchet MS", Font.BOLD, 36);
-    final Font font2 = new Font("Trebuchet MS", Font.PLAIN, 22);
-    final Font font3 = new Font("Trebuchet MS", Font.PLAIN, 16);
-    final Font font4 = new Font("Trebuchet MS", Font.PLAIN, 14);
-    final int width = 800;
-    final int height = 800;
+    static final Color col3 = new Color(51, 48, 47);
+    static final Color col4 = new Color(140, 73, 49);
+    static final Color white = new Color(255, 255, 255);
+    static final Color white1 = new Color(84, 79, 75, 255);
+    static Font font1 = new Font("Trebuchet MS", Font.BOLD, 36);
+    static Font font2 = new Font("Trebuchet MS", Font.PLAIN, 22);
+    static Font font3 = new Font("Trebuchet MS", Font.PLAIN, 16);
+    static Font font4 = new Font("Trebuchet MS", Font.PLAIN, 14);
+    static int width = 800;
+    static final int height = 800;
+    static Point frameLocation;
+    static int extendedState = NORMAL;
+    static Dimension frameSize;
+    static int gridCols = 3;
+    static boolean mobile = false;
     UI(Factory factory){
         super("Склад");
         this.factory = factory;
-
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(width, height);
-        //this.setLocation(500, 100);
-        setLocationRelativeTo(null);
+        //setExtendedState(NORMAL);
+        extendedState = this.getExtendedState();
+        if (frameLocation==null) frameLocation = this.getLocation();
+        if (frameSize == null) frameSize = this.getSize();
+        this.setLocation(frameLocation);
+        this.setExtendedState(extendedState);
+        //this.setLocationRelativeTo(this);
+        this.setSize(frameSize);
+
+
         Container pane = this.getContentPane();
         pane.setLayout(new BorderLayout());
         pane.setBackground(col4);
@@ -91,7 +96,51 @@ class UI extends JFrame {
 
             }
         });
+        this.addWindowStateListener(new WindowStateListener() {
 
+            @Override
+            public void windowStateChanged(WindowEvent e) {
+                //System.out.println("window state changed");
+                extendedState = UI.this.getExtendedState();
+            }
+        });
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                //System.out.println("Frame moved to (" + getX() + ", " + getY() + ")");
+                frameLocation = UI.this.getLocation();
+            }
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                //System.out.println("size changed to ("+getWidth()+", "+getHeight()+")");
+                frameSize = UI.this.getSize();
+                if (frameSize.width<550) {
+                    //System.out.println("new width: "+frameSize.width);
+                    width=460;
+                    font1 = new Font("Trebuchet MS", Font.BOLD, 30);
+                    font2 = new Font("Trebuchet MS", Font.PLAIN, 18);
+                    font3 = new Font("Trebuchet MS", Font.PLAIN, 14);
+                    font4 = new Font("Trebuchet MS", Font.PLAIN, 12);
+                    mobile = true;
+                    gridCols =2;
+                } else {
+                    width = 800;
+                    font1 = new Font("Trebuchet MS", Font.BOLD, 36);
+                    font2 = new Font("Trebuchet MS", Font.PLAIN, 22);
+                    font3 = new Font("Trebuchet MS", Font.PLAIN, 16);
+                    font4 = new Font("Trebuchet MS", Font.PLAIN, 14);
+                    mobile = false;
+                    gridCols =3;
+                }
+                rootPane.updateUI();
+                mainPanel.updateUI();
+                mainLabel.updateUI();
+                toMenu.updateUI();
+                //UI.this.update(UI.this.getGraphics());
+            }
+        });
 
     }
     public void styleMenuButton(JButton button) {
@@ -150,7 +199,7 @@ class UI extends JFrame {
         spinner.setFont(font3);
         spinner.setBorder(BorderFactory.createLineBorder(white, 1));
         JFormattedTextField textField = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
-        textField.setHorizontalAlignment(JTextField.LEFT);
+        textField.setHorizontalAlignment(LEFT);
         textField.setBackground(white1);
         textField.setForeground(white);
         //textField.setMargin(new Insets(10, 10, 10, 10));
@@ -177,23 +226,25 @@ class UI extends JFrame {
     public JPanel createProductPanel(String productInfo) {
         JPanel productPanel = new JPanel();
         productPanel.setBackground(col4);
-        //productPanel.setPreferredSize(new Dimension(400, 200));
-        JLabel label = new JLabel("<html><div style=\"width: "+(width-300)+"px; padding: 5px;\">"+productInfo+"</div></html");
+
+        JLabel label = new JLabel("<html><div style=\"width: "+(getWidth()*(mobile? 0.6 :0.6))+"px; padding: 5px;\">"+productInfo+"</div></html");
         styleLabel(label, font4);
         productPanel.add(label);
         return productPanel;
     }
-    public JPanel createProductPanel(String productInfo, int width) {
+    public JPanel createProductPanel(String productInfo, int w) {
         JPanel productPanel = new JPanel();
         productPanel.setBackground(col4);
-        //productPanel.setPreferredSize(new Dimension(400, 200));
-        JLabel label = new JLabel("<html><div style=\"width: "+(width-80)+"px; padding: 5px;\">"+productInfo+"</div></html");
-        styleLabel(label, font4);
+
+        JLabel label = new JLabel("<html><div style=\"width: "+((mobile ? getWidth()*0.75 : w)*0.8)+"px; padding: 5px;\">"+productInfo+"</div></html");
+
+        styleLabel(label, font4, white, LEFT);
         productPanel.add(label);
+
         return productPanel;
     }
     public void layoutButtonsGridPanel(JPanel panel, int numberOfButtons) {
-        if (numberOfButtons>=3) panel.setLayout(new GridLayout(0, 3, 10, 10));
+        if (numberOfButtons>=3) panel.setLayout(new GridLayout(0, gridCols, 10, 10));
         else if (numberOfButtons==2) panel.setLayout(new GridLayout(0, 2, 10, 10));
         else panel.setLayout(new GridLayout(0, 1, 10, 10));
     }
@@ -287,8 +338,8 @@ class MenuUI extends UI {
         factoryStatsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(factory.showAllProducts());
-                String info = "<html><div style=\"text-align: center\">Всього товарів: " +factory.getNumberOfProducts()
+                //System.out.println(factory.showAllProducts());
+                String info = "<html><div style=\"text-align: center; width: "+(mobile ? getWidth()*0.8 : "initial")+"\">Всього товарів: " +factory.getNumberOfProducts()
                         +"<br>Всього груп товарів: "  +factory.getNumberOfProductsGroups()
                         +"<br>Загальна вартість товару: "  +factory.showAllProductsCost()+"</div></html>";
                 StatsUI statisticsUI = new StatsUI("Інформація по складу", info, factory.showAllProducts(), factory);
@@ -382,6 +433,7 @@ class StatsUI extends UI{
     ArrayList<String> products;
     public StatsUI(String title, String information, ArrayList<String> products, Factory factory){
         super(factory);
+
         this.products = products;
         mainLabel.setText(title);
 
@@ -392,8 +444,8 @@ class StatsUI extends UI{
         statsPanel.setLayout(new GridBagLayout());
         statsPanel.setBackground(col3);
         generateProductLabels();
-
-        mainPanel.setBorder(new EmptyBorder(10, 40, 10, 40));
+        int sideMargin = mobile? 20 :  40;
+        mainPanel.setBorder(new EmptyBorder(10, sideMargin, 10, sideMargin));
 
         mainPanel.add(info, gbc);
         mainPanel.add(statsPanel, gbc);
@@ -425,6 +477,7 @@ class ChooseGroupUI extends UI {
         label.setText("Оберіть групу товарів:");
         styleLabel(label);
         mainPanel.add(label, gbc);
+        mainPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
         generateButtons();
 
@@ -481,8 +534,8 @@ class ChooseGroupUI extends UI {
                                 }
                                 break;
                             case "stats":
-                                System.out.println(factory.showAllProducts());
-                                String info = "<html><div style=\"text-align: center\">Назва групи: " + group.getName()
+                                //System.out.println(factory.showAllProducts());
+                                String info = "<html><div style=\"text-align: center; width: "+(mobile ? getWidth()*0.8 : "initial")+"\">Назва групи: " + group.getName()
                                         + "<br>Опис: " + group.getDescription()
                                         + "<br>Всього товарів: " + group.getNumberOfProducts()
                                         + "<br>Загальна вартість товару у групі: " + group.getAllProductsCostByGroup() + "</div></html>";
@@ -518,7 +571,7 @@ class SearchProductUI extends UI{
 
         searchField.setMargin(new Insets(10, 10, 10, 10));
         styleTextField(searchField);
-        searchField.setPreferredSize(new Dimension(super.getWidth()-200, 40));
+        searchField.setPreferredSize(new Dimension(super.getWidth()-(width/4), 40));
 
         styleComboBox(modeComboBox);
         modeComboBox.addItem("Пошук за іменем");
@@ -534,8 +587,8 @@ class SearchProductUI extends UI{
         //styleItemButton(searchButton);
 
         gbc.insets = new Insets(10, 10, 10, 10);
-
-        mainPanel.setBorder(new EmptyBorder(10, 40, 10, 40));
+        int sideMargin = mobile? 20 :  40;
+        mainPanel.setBorder(new EmptyBorder(10, sideMargin, 10, sideMargin));
         styleLabel(resultsAreHere, font3, white1);
         mainPanel.add(resultsAreHere, gbc);
 
@@ -629,8 +682,8 @@ class AddGroupUI extends UI {
         setVisible(false);
         mainLabel.setText("Додавання групи товарів");
 
-        styleLabel(nameLabel, SwingConstants.LEFT);
-        styleLabel(descriptionLabel, SwingConstants.LEFT);
+        styleLabel(nameLabel, LEFT);
+        styleLabel(descriptionLabel, LEFT);
 
         styleTextField(nameField);
         nameField.setMargin(new Insets(10, 10, 10, 10));
@@ -707,7 +760,7 @@ class EditGroupUI extends UI {
 
         styleLabel(label);
         String info = "<b>Назва:</b> "+group.getName()+"<br><b>Опис:</b> "+group.getDescription()+"<br><b>Товари:</b> "+listProductNames(group.getProducts());
-        groupInfoPanel = createProductPanel(info,400);
+        groupInfoPanel = createProductPanel(info,width/2);
         styleLabel(choseLabel);
 
         styleMenuButton(editName);
@@ -717,7 +770,9 @@ class EditGroupUI extends UI {
 
         buttonsPanel.setLayout(new GridBagLayout());
         buttonsPanel.setBackground(col3);
-        buttonsPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
+        int sideMargin = mobile? 10 :  40;
+        //mainPanel.setBorder(new EmptyBorder(10, sideMargin, 10, sideMargin));
+        buttonsPanel.setBorder(new EmptyBorder(20, sideMargin, 20, sideMargin));
         buttonsPanel.add(choseLabel, gbc);
         buttonsPanel.add(editName, gbc);
         buttonsPanel.add(editDescription, gbc);
@@ -824,12 +879,12 @@ class AddProductUI extends UI {
             });
             mainPanel.add(addGroupButton, gbc);
         } else {
-            styleLabel(groupName, SwingConstants.LEFT);
-            styleLabel(nameLabel, SwingConstants.LEFT);
-            styleLabel(descriptionLabel, SwingConstants.LEFT);
-            styleLabel(productionName, SwingConstants.LEFT);
-            styleLabel(quantityLabel, SwingConstants.LEFT);
-            styleLabel(priceLabel, SwingConstants.LEFT);
+            styleLabel(groupName, LEFT);
+            styleLabel(nameLabel, LEFT);
+            styleLabel(descriptionLabel, LEFT);
+            styleLabel(productionName, LEFT);
+            styleLabel(quantityLabel, LEFT);
+            styleLabel(priceLabel, LEFT);
 
             styleSpinner(quantitySpinner);
             styleSpinner(priceSpinner);
@@ -868,7 +923,7 @@ class AddProductUI extends UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String group=(String) groupComboBox.getSelectedItem();
-                System.out.println(group);
+                //System.out.println(group);
                 String name = nameField.getText();
                 String description = descriptionField.getText();
                 String producer = productionField.getText();
@@ -922,20 +977,13 @@ class ChooseProductUI extends UI{
         label.setText("Оберіть товар:");
         styleLabel(label);
         mainPanel.add(label, gbc);
+        mainPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
         generateButtons();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(20, 10, 20, 10);
         productsPanel.setBackground(col3);
         layoutButtonsGridPanel(productsPanel, factory.getNumberOfProducts());
 
-//        productsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-//        productsPanel.setMaximumSize(new Dimension(600, 200));
-//        JScrollPane buttonsScroller = new JScrollPane(productsPanel);
-//        buttonsScroller.setBorder(null);
-//        buttonsScroller.getVerticalScrollBar().setUnitIncrement(16);
-//        buttonsScroller.getHorizontalScrollBar().setUnitIncrement(16);
-//        //add(buttonsScroller, gbc);
-//        mainPanel.add(buttonsScroller, gbc);
         mainPanel.add(productsPanel, gbc);
     }
     private void generateButtons(){
@@ -1021,7 +1069,7 @@ class EditProductUI extends UI{
 
         styleLabel(label);
         String info = product.toStringUI();
-        productInfoPanel = createProductPanel(info,400);
+        productInfoPanel = createProductPanel(info,width/2);
         styleLabel(choseLabel);
 
         styleMenuButton(editGroup);
@@ -1034,7 +1082,9 @@ class EditProductUI extends UI{
 
         buttonsPanel.setLayout(new GridBagLayout());
         buttonsPanel.setBackground(col3);
-        buttonsPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
+        int sideMargin = mobile? 10 :  40;
+        //mainPanel.setBorder(new EmptyBorder(10, sideMargin, 10, sideMargin));
+        buttonsPanel.setBorder(new EmptyBorder(20, sideMargin, 20, sideMargin));
         buttonsPanel.add(choseLabel, gbc);
         buttonsPanel.add(editGroup, gbc);
         buttonsPanel.add(editName, gbc);
@@ -1129,12 +1179,14 @@ public class Program {
             ex.printStackTrace();
         }
         factory = new Factory();
-        System.out.println(factory);
+        //System.out.println(factory);
         init();
 
     }
     private static void init(){
         menuUI = new MenuUI(factory);
+        menuUI.setSize(800, 800);
+        menuUI.setLocationRelativeTo(null);
         menuUI.setVisible(true);
 
     }
