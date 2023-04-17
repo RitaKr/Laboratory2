@@ -122,7 +122,7 @@ class UI extends JFrame {
                 if (frameSize.width<550) {
                     //System.out.println("new width: "+frameSize.width);
                     width=460;
-                    font1 = new Font("Trebuchet MS", Font.BOLD, 30);
+                    font1 = new Font("Trebuchet MS", Font.BOLD, 28);
                     font2 = new Font("Trebuchet MS", Font.PLAIN, 18);
                     font3 = new Font("Trebuchet MS", Font.PLAIN, 14);
                     font4 = new Font("Trebuchet MS", Font.PLAIN, 12);
@@ -822,7 +822,7 @@ class EditGroupUI extends UI {
             int confirm = JOptionPane.showConfirmDialog(EditGroupUI.super.rootPane, message2+" на \""+newValue+"\"?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
             if (confirm == 0) {
                 String result = factory.editProductsGroup(group.getName(), newValue, mode);
-                JOptionPane.showMessageDialog(EditGroupUI.super.rootPane, result, "Операція пройшла успішно!", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(EditGroupUI.super.rootPane, result, "Результат операції", JOptionPane.PLAIN_MESSAGE);
                 dispose();
                 EditGroupUI editGroupUI = new EditGroupUI(group, factory);
                 editGroupUI.setVisible(true);
@@ -1162,7 +1162,7 @@ class EditProductUI extends UI{
             int confirm = JOptionPane.showConfirmDialog(EditProductUI.super.rootPane, message2+" на \""+newValue+"\"?", "Підтвердження операції", JOptionPane.YES_NO_OPTION);
             if (confirm == 0) {
                 String result = factory.editProduct(product.getName(), newValue, mode);
-                JOptionPane.showMessageDialog(EditProductUI.super.rootPane, result, "Операція пройшла успішно!", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(EditProductUI.super.rootPane, result, "Результат операції", JOptionPane.PLAIN_MESSAGE);
                 dispose();
                 EditProductUI editProductUI = new EditProductUI(product, factory);
                 editProductUI.setVisible(true);
