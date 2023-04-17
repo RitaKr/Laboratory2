@@ -75,7 +75,6 @@ public class intInputDialog {
                     JOptionPane.showMessageDialog(frame, result, "Операція пройшла успішно!", JOptionPane.PLAIN_MESSAGE);
 
                 }
-
             }
         });
         cancel.addActionListener(new ActionListener() {
