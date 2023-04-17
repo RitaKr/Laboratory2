@@ -845,7 +845,7 @@ class AddProductUI extends UI {
     SpinnerModel spinnerModel = new SpinnerNumberModel(val, 0, 100000, 1);
     JSpinner quantitySpinner = new JSpinner(spinnerModel);
 
-    SpinnerModel model = new SpinnerNumberModel(val2, 1000, 100000, 500);
+    SpinnerModel model = new SpinnerNumberModel(val2, 1000, 10000000, 500);
     JSpinner priceSpinner = new JSpinner(model);
 
     JButton submit = new JButton("Створити товар");
@@ -1125,7 +1125,7 @@ class EditProductUI extends UI{
         editPrice.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new intInputDialog(EditProductUI.this, "Зміна ціни товару", "Введіть нову ціну товару "+product.getName()+":", product.getPrice(), 3000, 10000000, 500, "editPrice", product.getName());
+                new intInputDialog(EditProductUI.this, "Зміна ціни товару", "Введіть нову ціну товару "+product.getName()+":", product.getPrice(), 1000, 10000000, 500, "editPrice", product.getName());
                 dispose();
                 EditProductUI editProductUI = new EditProductUI(product, factory);
                 editProductUI.setVisible(true);

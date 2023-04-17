@@ -81,7 +81,7 @@ public class Factory {
             for (int i = 0; i<products.size(); i++) {
                 allProducts.add(products.get(i));
             }
-            //nProducts+=pg.getNumberOfProducts();
+
         }
         try {
             FileWriter writer = new FileWriter("Factory.txt");
@@ -137,7 +137,6 @@ public class Factory {
             } else {
                 return "Invalid argument!\n";
             }
-            //System.out.println(allProducts);
             updateStock();
             //System.out.println("Групу товарів "+name+" відредаговано!\n");
             return "Групу товарів "+name+" відредаговано!\n";
@@ -156,11 +155,10 @@ public class Factory {
         if (productsGroups.contains(findProductsGroup(name))) {
             productsGroups.remove(findProductsGroup(name));
             updateStock();
-            //System.out.println("Групу товарів "+name+" видалено!\n");
-            //System.out.println(this);
+
             return "Групу товарів "+name+" видалено!\n";
         } else {
-            //System.out.println("Група товарів "+name+" не існує на складі!\n");
+
             return "Група товарів "+name+" не існує на складі!\n";
         }
     }
@@ -311,18 +309,6 @@ public class Factory {
         return products;
 
     }
-    public ArrayList<Product> findProduct(int search, String mode) {
-        ArrayList<Product> products = new ArrayList<>();
-        for (Product pr:allProducts) {
-            if (pr.getPrice()==search && mode.equalsIgnoreCase("price") || pr.getQuantity()==search && mode.equalsIgnoreCase("quantity")){
-                products.add(pr);
-                ////System.out.println(pr);
-            }
-        }
-        ////System.out.println("no matches found");
-        return products;
-
-    }
 
     /**
      * Метод знаходження групи товарів за назвою
@@ -462,55 +448,7 @@ public class Factory {
             return "Товар "+name+" не існує на складі!\n";
         }
     }
-    private boolean contains(ArrayList<ProductsGroup> arr, String item){
-        boolean contains = false;
-        for (ProductsGroup i:arr) if (i.getName().equalsIgnoreCase(item)) {
-            contains = true;
-            break;
-        }
-        return contains;
-    }
-    private boolean contains(ArrayList<Product> arr, int item, String mode){
-        boolean contains = false;
-        for (Product i:arr) {
-            if (i.getPrice()==item && mode.equalsIgnoreCase("price") || i.getQuantity()==item && mode.equalsIgnoreCase("quantity")) {
-                contains = true;
-                break;
-            }
-        }
-        return contains;
-    }
-    private boolean contains(ArrayList<Product> arr, String item, String mode){
-        boolean contains = false;
-        for (Product i:arr) {
-            if (i.getName().equalsIgnoreCase(item) && mode.equalsIgnoreCase("name") || i.getProducer().equalsIgnoreCase(item) && mode.equalsIgnoreCase("producer")) {
-                contains = true;
-                break;
-            }
-        }
-        return contains;
-    }
-    public String normalizeCase(String string) {
-        String res="";
-        char ch=string.charAt(0);
-        if (ch>='а' && ch<='я') {
-            ch = (char) (ch-'а'+'А');
-        } else if(ch=='і' || ch=='ї'  || ch=='є'){
-            ch = (char) (ch-'є'+'Є');
-        }
-        res+=ch;
-        for (int i=1; i<string.length(); i++) {
-            if (string.charAt(i-1)==' ' && (string.charAt(i)>='а' && string.charAt(i)<='я')){
-                res+=(char)(string.charAt(i)-'а'+'А');
-            } else if (string.charAt(i-1)==' ' && (string.charAt(i)=='і' || string.charAt(i)=='ї'  || string.charAt(i)=='є')){
-                res+=(char)(string.charAt(i)-'є'+'Є');
-            }else {
-                res+=string.charAt(i);
-            }
 
-        }
-        return res;
-    }
 
     /**
      * Метод виводу інформації по складу
