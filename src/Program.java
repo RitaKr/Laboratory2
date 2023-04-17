@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 import static javax.swing.SwingConstants.LEFT;
 
+/**
+ * Клас UI.java відповідає за графічний інтерфейс користувача
+ */
 class UI extends JFrame {
     Factory factory;
     JButton toMenu;
@@ -665,6 +668,9 @@ class SearchProductUI extends UI{
     }
 }
 
+/**
+ * Клас AddGroupUI.java відповідає за інтерфейс додавання групи товару
+ */
 class AddGroupUI extends UI {
     JLabel nameLabel = new JLabel("Введіть назву групи:");
     JTextField nameField = new JTextField(20);
@@ -731,6 +737,9 @@ class AddGroupUI extends UI {
 
 }
 
+/**
+ * Клас EditGroupUI.java відповідає за інтерфейс редагування групи товарів
+ */
 class EditGroupUI extends UI {
     JLabel label = new JLabel("Обрана група товарів:");
     JPanel groupInfoPanel;
@@ -798,7 +807,7 @@ class EditGroupUI extends UI {
     }
 
     /**
-     * Method that shows dialog windows to change fields of products group
+     * Метод, що показує діалогове вікно, в якому можна редагувати різні поля групи товарів
      * @param value starting value of input
      * @param message1 message that will be displayed in the dialog window (asking for new value)
      * @param message2 message that will be displayed in the confirmation window (are you sure?)
@@ -823,9 +832,11 @@ class EditGroupUI extends UI {
             }
         }
     }
-
 }
 
+/**
+ * Клас AddProductUI.java, що відповідає за інтерфейс додавання продукту до групи
+ */
 class AddProductUI extends UI {
     JLabel groupName = new JLabel("Введіть назву групи:");
     JComboBox groupComboBox = new JComboBox();
@@ -957,11 +968,12 @@ class AddProductUI extends UI {
                 }
             }
         });
-
-
     }
 }
 
+/**
+ * Клас ChooseProductUI.java, що відповідає за інтерфейс постачання та списання товару
+ */
 class ChooseProductUI extends UI{
     JLabel label = new JLabel();
     JPanel productsPanel = new JPanel();
@@ -1039,14 +1051,14 @@ class ChooseProductUI extends UI{
                         }
                     }
                 });
-
-
             }
         }
     }
-
 }
 
+/**
+ * Клас EditProductUI.java, що відповідає за редагування товару за різними параметрами (назва, опис, ціна, приналежність до групи)
+ */
 class EditProductUI extends UI{
 
     JLabel label = new JLabel("Обраний товар:");
@@ -1132,7 +1144,6 @@ class EditProductUI extends UI{
                 //editProduct("", "Введіть нову ціну товару "+product.getName(),"Ви впевнені, що хочете змінити ціну \""+product.getPrice()+"\"", "price");
             }
         });
-
     }
 
     /**
@@ -1161,13 +1172,12 @@ class EditProductUI extends UI{
             }
         }
     }
-
 }
 
 
-
-
-
+/**
+ * Клас Program.java слугує для запуску програми
+ */
 public class Program {
     static Factory factory;
     static MenuUI menuUI;
@@ -1188,6 +1198,5 @@ public class Program {
         menuUI.setSize(800, 800);
         menuUI.setLocationRelativeTo(null);
         menuUI.setVisible(true);
-
     }
 }
