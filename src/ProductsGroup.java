@@ -66,21 +66,7 @@ public class ProductsGroup {
 
 
   }
-  /**
-   * Метод, що повертає інформацію про групу товарів
-   * @return масив стрічок з інформацією про групу товарів
-   */
-  public ArrayList<String> showAllProductsByGroup() {
-      ArrayList<String> pr = new ArrayList<>();
-      for (int i=0; i<numberOfProducts;i++){
-        pr.add(""+(i+1)+") "+products.get(i).toStringUI());
-      }
-//            System.out.println("Інформація по групі товарів "+groupName+": ");
-//            System.out.println(pg);
-      //System.out.println(products);
-      return pr;
 
-  }
   /**
    * Метод, що повертає загальну вартість товарів у конкретній групі
    * @return стрічка з повідомленням про загальну вартість

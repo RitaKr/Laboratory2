@@ -325,49 +325,7 @@ public class Factory {
         }
         return group;
     }
-    /**
-     * Метод, що повертає інформацію про всі продукти на складі
-     * @return масив стрічок з інформацією про кожний продукт
-     */
-    public ArrayList<String> showAllProducts() {
-        if (!allProducts.isEmpty()) {
-            //String s="Всі товари групи товарів "+groupName+": \n";
-            ArrayList<String> products = new ArrayList<>();
-            for (int i=0; i<numberOfProducts;i++){
-                products.add(""+(i+1)+") "+allProducts.get(i).toStringUI());
-            }
-//            //System.out.println("Інформація по групі товарів "+groupName+": ");
-//            //System.out.println(pg);
-            ////System.out.println(products);
-            return products;
-        } else {
-            //System.out.print("Склад пустий.\n");
-            return null;
-        }
-    }
 
-    /**
-     * Метод, що повертає інформацію про всі товари у конкретній групі товарів
-     * @param groupName назва групи товарів
-     * @return масив стрічок з інформацією по кожній групі товарів
-     */
-    public ArrayList<String> showAllProductsByGroup(String groupName) {
-        ProductsGroup pg = findProductsGroup(groupName);
-        if (pg!=null) {
-            //String s="Всі товари групи товарів "+groupName+": \n";
-            ArrayList<String> products = new ArrayList<>();
-            for (int i=0; i<pg.getProducts().size();i++){
-               products.add(""+(i+1)+") "+pg.getProducts().get(i).toStringUI());
-            }
-//            //System.out.println("Інформація по групі товарів "+groupName+": ");
-//            //System.out.println(pg);
-            ////System.out.println(products);
-            return products;
-        } else {
-            //System.out.print("Групи товарів "+groupName+" немає на складі.\n");
-            return null;
-        }
-    }
 
     /**
      * Метод, що повертає загальну вартість усіх продуктів на складі
@@ -384,26 +342,6 @@ public class Factory {
         return ""+totalCost+"грн\n";
     }
 
-    /**
-     * Метод, що повертає вартість усіх продуктів у межах групи
-     * @param groupName назва групи товарів
-     * @return String з повідомленням про вартість товарів у групі
-     */
-    public String showAllProductsCostByGroup(String groupName) {
-        ProductsGroup pg = findProductsGroup(groupName);
-        if (pg!=null) {
-            int totalCost = 0;
-            for (Product p:pg.getProducts()) {
-                totalCost+=(p.getQuantity()*p.getPrice());
-            }
-            //System.out.println("Загальна вартість товару групи товарів "+pg.getName()+" становить "+totalCost+" грн\n");
-            return ""+totalCost+" грн\n";
-        } else {
-            //System.out.print("Групи товарів "+groupName+" немає на складі.\n");
-            return "Групи товарів "+groupName+" немає на складі.\n";
-        }
-
-    }
     /**
      * Метод додавання певної кількості товару до складу.
      * @param name назва товару

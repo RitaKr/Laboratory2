@@ -6,8 +6,13 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static javax.swing.SwingConstants.LEFT;
+import static java.lang.CharSequence.compare;
+import static javax.swing.SwingConstants.*;
 
 /**
  * Клас UI.java відповідає за графічний інтерфейс користувача
@@ -22,6 +27,7 @@ class UI extends JFrame {
     static final  Color col2 = new Color(0, 0, 0);
     static final Color col3 = new Color(51, 48, 47);
     static final Color col4 = new Color(140, 73, 49);
+    static final Color col5 = new Color(139, 73, 49, 136);
     static final Color white = new Color(255, 255, 255);
     static final Color white1 = new Color(84, 79, 75, 255);
     static Font font1 = new Font("Trebuchet MS", Font.BOLD, 36);
@@ -235,12 +241,27 @@ class UI extends JFrame {
         productPanel.add(label);
         return productPanel;
     }
+    public JPanel createProductPanel(String productInfo, Color color) {
+        JPanel productPanel = new JPanel();
+        productPanel.setBackground(color);
+        JLabel label = new JLabel("<html><div style=\"width: "+(getWidth()*(mobile? 0.6 :0.6))+"px; padding: 5px;\">"+productInfo+"</div></html");
+        styleLabel(label, font4);
+        productPanel.add(label);
+        return productPanel;
+    }
     public JPanel createProductPanel(String productInfo, int w) {
         JPanel productPanel = new JPanel();
         productPanel.setBackground(col4);
-
         JLabel label = new JLabel("<html><div style=\"width: "+((mobile ? getWidth()*0.75 : w)*0.8)+"px; padding: 5px;\">"+productInfo+"</div></html");
+        styleLabel(label, font4, white, LEFT);
+        productPanel.add(label);
 
+        return productPanel;
+    }
+    public JPanel createProductPanel(String productInfo, int w, Color color) {
+        JPanel productPanel = new JPanel();
+        productPanel.setBackground(color);
+        JLabel label = new JLabel("<html><div style=\"width: "+((mobile ? getWidth()*0.75 : w)*0.8)+"px; padding: 5px;\">"+productInfo+"</div></html");
         styleLabel(label, font4, white, LEFT);
         productPanel.add(label);
 
@@ -342,10 +363,15 @@ class MenuUI extends UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println(factory.showAllProducts());
-                String info = "<html><div style=\"text-align: center; width: "+(mobile ? getWidth()*0.8 : "initial")+"\">Всього товарів: " +factory.getNumberOfProducts()
-                        +"<br>Всього груп товарів: "  +factory.getNumberOfProductsGroups()
-                        +"<br>Загальна вартість товару: "  +factory.showAllProductsCost()+"</div></html>";
-                StatsUI statisticsUI = new StatsUI("Інформація по складу", info, factory.showAllProducts(), factory);
+                String info = "<html><div style=\"text-align: center; width: "+(mobile ? getWidth()*0.8 : "initial")+"\">"
+                        +(factory.getNumberOfProductsGroups()>0 ?
+                            ("Всього груп товарів: " +factory.getNumberOfProductsGroups()
+                            +(factory.getNumberOfProducts()>0 ?
+                                ("<br>Всього товарів: " +factory.getNumberOfProducts()+"<br>Загальна вартість товару: "  +factory.showAllProductsCost())
+                                :"<br>На складі не зареєстровано жодного товару"))
+                            : "<br>На складі не зареєстровано жодної групи товарів")
+                        +"</div></html>";
+                StatsUI statisticsUI = new StatsUI("Інформація по складу", info, factory.getAllProducts(), factory);
                 statisticsUI.setVisible(true);
                 dispose();
             }
@@ -433,8 +459,8 @@ class MenuUI extends UI {
 class StatsUI extends UI{
     JLabel info = new JLabel();
     JPanel statsPanel = new JPanel();
-    ArrayList<String> products;
-    public StatsUI(String title, String information, ArrayList<String> products, Factory factory){
+    ArrayList<Product> products;
+    public StatsUI(String title, String information, ArrayList<Product> products, Factory factory){
         super(factory);
 
         this.products = products;
@@ -457,8 +483,9 @@ class StatsUI extends UI{
     private void generateProductLabels() {
         if (products!=null && !products.isEmpty()) {
 
-            for (String product : products) {
-                JPanel productPanel = createProductPanel(product);
+            for (Product product : products) {
+                JPanel productPanel = product.getQuantity()>0 ? createProductPanel((products.indexOf(product)+1)+") "+product.toStringUI())
+                        : createProductPanel((products.indexOf(product)+1)+") "+product.toStringUI(), col5);
                 statsPanel.add(productPanel, gbc);
             }
         }
@@ -540,9 +567,11 @@ class ChooseGroupUI extends UI {
                                 //System.out.println(factory.showAllProducts());
                                 String info = "<html><div style=\"text-align: center; width: "+(mobile ? getWidth()*0.8 : "initial")+"\">Назва групи: " + group.getName()
                                         + "<br>Опис: " + group.getDescription()
-                                        + "<br>Всього товарів: " + group.getNumberOfProducts()
-                                        + "<br>Загальна вартість товару у групі: " + group.getAllProductsCostByGroup() + "</div></html>";
-                                StatsUI statisticsUI = new StatsUI("Інформація по групі товарів", info, group.showAllProductsByGroup(), factory);
+                                        + (group.getNumberOfProducts()>0 ?
+                                        ("<br>Всього товарів: " + group.getNumberOfProducts()+ "<br>Загальна вартість товару у групі: " + group.getAllProductsCostByGroup())
+                                        : "<br>В групі не зареєстровано жодного товару")
+                                        + "</div></html>";
+                                StatsUI statisticsUI = new StatsUI("Інформація по групі товарів", info, group.getProducts(), factory);
                                 statisticsUI.setVisible(true);
                                 dispose();
                                 break;
@@ -560,7 +589,9 @@ class SearchProductUI extends UI{
     JLabel resultsAreHere = new JLabel("Тут будуть результати пошуку...", SwingConstants.CENTER);
     JPanel searchPanel = new JPanel();
     JTextField searchField = new JTextField(20);
+    JPanel comboBoxPanel = new JPanel();
     JComboBox modeComboBox = new JComboBox();
+    JComboBox filterComboBox = new JComboBox();
     //JButton searchButton = new JButton("Пошук");
     JPanel mainMainPanel = new JPanel();
     ArrayList<Product> searchResult;
@@ -574,7 +605,7 @@ class SearchProductUI extends UI{
 
         searchField.setMargin(new Insets(10, 10, 10, 10));
         styleTextField(searchField);
-        searchField.setPreferredSize(new Dimension(super.getWidth()-(width/4), 40));
+
 
         styleComboBox(modeComboBox);
         modeComboBox.addItem("Пошук за іменем");
@@ -583,13 +614,25 @@ class SearchProductUI extends UI{
         modeComboBox.addItem("Пошук за групою");
         modeComboBox.addItem("Пошук за ціною");
 
+        styleComboBox(filterComboBox);
+        filterComboBox.addItem("Усі");
+        filterComboBox.addItem("В наявності");
+
+        comboBoxPanel.setLayout(new BorderLayout());
+        comboBoxPanel.add(modeComboBox, BorderLayout.CENTER);
+        comboBoxPanel.add(filterComboBox, BorderLayout.EAST);
+
+        //modeComboBox.setPreferredSize(new Dimension(width/4, 40));
+        searchField.setPreferredSize(new Dimension((int) (super.getWidth()-width*0.25), 40));
+
         searchPanel.setLayout(new BorderLayout());
         searchPanel.add(searchField,BorderLayout.CENTER);
-        searchPanel.add(modeComboBox,BorderLayout.EAST);
+        //searchPanel.add(modeComboBox,BorderLayout.CENTER);
+        searchPanel.add(comboBoxPanel,BorderLayout.EAST);
 
         //styleItemButton(searchButton);
 
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(10, 0, 10, 0);
         int sideMargin = mobile? 20 :  40;
         mainPanel.setBorder(new EmptyBorder(10, sideMargin, 10, sideMargin));
         styleLabel(resultsAreHere, font3, white1);
@@ -609,30 +652,41 @@ class SearchProductUI extends UI{
         add(mainLabel, BorderLayout.NORTH);
         add(mainMainPanel, BorderLayout.CENTER);
         add(toMenu, BorderLayout.SOUTH);
+        if (factory.getNumberOfProducts()==0) {
+            resultsAreHere.setText("На складі не зареєстровано жодного товару");
+            mainPanel.updateUI();
+        } else {
+            modeComboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    searchChanged();
+                }
+            });
+            filterComboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    searchChanged();
+                }
+            });
+            searchField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    searchChanged();
+                }
 
-        modeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                searchChanged();
-            }
-        });
-        searchField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                searchChanged();
-            }
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    //searchChanged(e);
+                    searchChanged();
+                }
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                //searchChanged(e);
-                searchChanged();
-            }
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    searchChanged();
+                }
+            });
+        }
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                searchChanged();
-            }
-        });
 
 
     }
@@ -647,7 +701,11 @@ class SearchProductUI extends UI{
             //JOptionPane.showMessageDialog(SearchProductUI.super.rootPane, "Введіть пошуковий запит!", "Помилка!", JOptionPane.ERROR_MESSAGE);
         } else {
             String mode =(String) modeComboBox.getSelectedItem();
-            searchResult = factory.findProduct(search, mode);
+            boolean filterApplied = !Objects.equals((String) filterComboBox.getSelectedItem(), "Усі");
+            Stream<Product> searchResultStream = factory.findProduct(search, mode).stream().sorted(Comparator.comparing(Product::getQuantity).reversed());
+            searchResult = (ArrayList<Product>)(filterApplied ?
+                     searchResultStream.filter(p -> p.getQuantity()>0)
+                    : searchResultStream).collect(Collectors.toList());
             //System.out.println(searchResult);
         }
         generateProductLabels();
@@ -657,7 +715,7 @@ class SearchProductUI extends UI{
         if (searchResult!=null && !searchResult.isEmpty()) {
 
             for (Product product : searchResult) {
-                JPanel productPanel = createProductPanel(product.toStringUI());
+                JPanel productPanel = product.getQuantity()>0 ? createProductPanel(product.toStringUI()) : createProductPanel(product.toStringUI(), col5);
                 mainPanel.add(productPanel, gbc);
             }
         } else {
@@ -982,11 +1040,11 @@ class ChooseProductUI extends UI{
 
     public ChooseProductUI(String title,  Factory factory, String action) {
         super(factory);
-        this.productsArr = factory.getAllProducts();
+        this.productsArr = action.equals("sell") ? (ArrayList<Product>) factory.getAllProducts().stream().filter(p -> p.getQuantity()>0).collect(Collectors.toList()) : factory.getAllProducts();
         this.action = action;
         mainLabel.setText(title);
 
-        label.setText("Оберіть товар:");
+        label.setText(action.equals("sell") ? "Оберіть товар з тих, що є в наявності:" :"Оберіть товар:");
         styleLabel(label);
         mainPanel.add(label, gbc);
         mainPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
@@ -994,24 +1052,29 @@ class ChooseProductUI extends UI{
         generateButtons();
         gbc.insets = new Insets(20, 10, 20, 10);
         productsPanel.setBackground(col3);
-        layoutButtonsGridPanel(productsPanel, factory.getNumberOfProducts());
+        layoutButtonsGridPanel(productsPanel, productsArr.size());
 
         mainPanel.add(productsPanel, gbc);
     }
     private void generateButtons(){
         if (productsArr.isEmpty()) {
-            label.setText("На складі нема жодного товару");
+            label.setText(action.equals("sell") ? "На складі нема в наявності жодного товару:" :"На складі не зареєстровано жодного товару");
             gbc.insets = new Insets(10, 10, 10, 10);
             mainPanel.add(label, gbc);
-            JButton addProductButton = new JButton("Додати товар");
+            JButton addProductButton = new JButton(action.equals("sell") ? "Поставка товару":"Додати товар");
             styleMenuButton(addProductButton);
 
             addProductButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    AddProductUI addProductUI = new AddProductUI(factory);
-                    addProductUI.setVisible(true);
                     dispose();
+                    if (action.equals("sell")){
+                        ChooseProductUI chooseProductUI = new ChooseProductUI("Поставка товару", factory, "addMore");
+                        chooseProductUI.setVisible(true);
+                    } else {
+                        AddProductUI addProductUI = new AddProductUI(factory);
+                        addProductUI.setVisible(true);
+                    }
                 }
             });
             mainPanel.add(addProductButton, gbc);
@@ -1031,7 +1094,9 @@ class ChooseProductUI extends UI{
                                 break;
                             case "sell":
                                 new intInputDialog(ChooseProductUI.this, "Списання товару", "Скільки шт. "+product.getName()+" продали?",  product.getQuantity(), "sell", product.getName());
-
+                                dispose();
+                                ChooseProductUI sellProductUI = new ChooseProductUI("Списання товару", factory, "sell");
+                                sellProductUI.setVisible(true);
                                 break;
                             case "edit":
                                 EditProductUI editProductUI = new EditProductUI(product, factory);
@@ -1043,8 +1108,8 @@ class ChooseProductUI extends UI{
                                 if (confirm == 0) {
                                     JOptionPane.showMessageDialog(ChooseProductUI.super.rootPane, factory.deleteProduct(product.getName()), "Результат видалення товару", JOptionPane.PLAIN_MESSAGE);
                                     dispose();
-                                    ChooseProductUI chooseProductUI = new ChooseProductUI("Видалення товару", factory, "delete");
-                                    chooseProductUI.setVisible(true);
+                                    ChooseProductUI deleteProductUI = new ChooseProductUI("Видалення товару", factory, "delete");
+                                    deleteProductUI.setVisible(true);
                                 }
                                 break;
 
@@ -1080,8 +1145,7 @@ class EditProductUI extends UI{
         mainLabel.setText("Редагування товару");
 
         styleLabel(label);
-        String info = product.toStringUI();
-        productInfoPanel = createProductPanel(info,width/2);
+        productInfoPanel = product.getQuantity()>0 ? createProductPanel(product.toStringUI(),width/2) : createProductPanel(product.toStringUI(),width/2, col5);
         styleLabel(choseLabel);
 
         styleMenuButton(editGroup);
@@ -1112,6 +1176,7 @@ class EditProductUI extends UI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 editProduct("", "Введіть назву групи, до якої хочете перемістити товар "+product.getName(), "Ви впевнені, що хочете змінити групу \""+product.getGroup()+"\"", "group");
+                productInfoPanel.updateUI();
             }
         });
         editName.addActionListener(new ActionListener() {
@@ -1164,7 +1229,7 @@ class EditProductUI extends UI{
                 String result = factory.editProduct(product.getName(), newValue, mode);
                 JOptionPane.showMessageDialog(EditProductUI.super.rootPane, result, "Результат операції", JOptionPane.PLAIN_MESSAGE);
                 dispose();
-                EditProductUI editProductUI = new EditProductUI(product, factory);
+                EditProductUI editProductUI = new EditProductUI(factory.findProduct(product.getName()), factory);
                 editProductUI.setVisible(true);
 
             } else {

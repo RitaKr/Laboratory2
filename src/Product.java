@@ -81,7 +81,7 @@ public class Product {
     return "Назва: " + name + "," +
             "\n  Опис: "+description+"," +
             "\n  Виробник: "+producer+"," +
-            "\n  Кількість: "+quantity+","+
+            "\n  В наявності: "+(quantity>0?quantity+" шт":"немає в наявності")+","+
             "\n  Ціна за одиницю: "+price+" грн\n";
   }
 
@@ -93,7 +93,7 @@ public class Product {
     return "<b>Назва:</b> " + name + "" +
             "<br><b>Опис:</b> "+description+"" +
             "<br><b>Виробник:</b> "+producer+"" +
-            "<br><b>Кількість:</b> "+quantity+""+
+            "<br><b>В наявності:</b> "+(quantity>0?quantity+" шт":"немає в наявності")+
             "<br><b>Ціна за одиницю:</b> "+price+" грн" +
             "<br><b>Належить до групи:</b> "+group+"";
   }
